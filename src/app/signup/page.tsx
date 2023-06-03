@@ -1,10 +1,10 @@
 import FormPagesLayout from '@/components/FormPagesLayout'
-import LoginForm from '@/components/LoginForm'
+import SignUpForm from '@/components/SignUpForm'
 
-export default function Home() {
+export default function SignUp() {
    return (
       <FormPagesLayout>
-         <LoginForm />
+         <SignUpForm />
       </FormPagesLayout>
    )
 }
