@@ -22,7 +22,7 @@ export default function InputField(props: InputFieldProps) {
             onChange={onChange}
             required={required}
          />
-         <i className='relative top-[-33px] left-4 w-fit'>
+         <i className='relative top-[-31px] left-4 w-fit'>
             {children ? children : <div className='h-4'></div>}
          </i>
       </div>

@@ -5,12 +5,23 @@ import { HiOutlineUser, HiOutlineLockClosed } from 'react-icons/hi'
 import Link from 'next/link'
 import InputField from '../book/verse/InputField'
 import InputSubmit from '../book/verse/InputSubmit'
+import useUserState from '@/hooks/useUserState'
+import AuthService from '@/service/AuthService'
+import { userStateFormatter } from '@/utils/authUserHelper'
 
 export default function LoginForm() {
    const router = useRouter()
 
    const [email, setEmail] = useState('')
    const [pass, setPass] = useState('')
+
+   const { setUserState } = useUserState()
+
+   async function signIn(email: string, password: string) {
+      const user = await AuthService.signIn(email, password)
+      setUserState(userStateFormatter(user))
+      router.push('/dashboard')
+   }
 
    return (
       <>
@@ -24,7 +35,7 @@ export default function LoginForm() {
          <form
             onSubmit={(event) => {
                event.preventDefault()
-               router.push('/dashboard')
+               signIn(email, pass)
             }}
          >
             <InputField
@@ -54,11 +65,7 @@ export default function LoginForm() {
                <label htmlFor='check'>Lembre-me</label>
             </div>
             <div className='right'>
-               <label>
-                  <Link href='/user-dashboard' className='no-underline'>
-                     Esqueceu a senha?
-                  </Link>
-               </label>
+               <label>Esqueceu a senha?</label>
             </div>
          </div>
       </>

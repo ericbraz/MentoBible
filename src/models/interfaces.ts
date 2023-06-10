@@ -48,33 +48,17 @@ export interface Test {
    // so there must be a verification in the code
    courseId: string | null
    chapterId: string | null
-   testContent: TestContent
+   testContent: TestContent[]
    courseEligibility: 0.7 | 0.8 | 0.9 | 1
 }
 
 export interface TestContent {
    content: [
-      { id: string },
       { question: string },
-      { answers: Array<string> } /* multiple choice */,
-      { correctAnswer: Array<boolean> } /* only one true element */
+      { answers: string[] } /* multiple choice */,
+      { correctAnswer: boolean[] } /* only one true element */
    ]
 }
-
-export interface User {
-   id: string
-   firstName: string
-   lastName: string
-   email: string
-   photoURL?: string
-   signUpDate?: Date
-   userRole?: UserRole
-   courseIds?: Array<string>
-   lessonCompletionIds?: Array<string>
-   testCompletionIds?: Array<string>
-   performance?: Array<TestPerformance>
-}
-export type UserRole = 'user' | 'admin' | 'master'
 
 export interface TestPerformance {
    id: string
@@ -84,4 +68,26 @@ export interface TestPerformance {
    courseId: string | null
    chapterId: string | null
    grade: number
+}
+
+export interface User {
+   id: string
+   firstName: string
+   lastName: string
+   email: string
+   userRoleIds?: string[]
+   photoURL?: string
+   signUpDate?: Date
+   courseIds?: string[]
+   lessonCompletionIds?: string[]
+   testCompletionIds?: string[]
+   performanceIds?: string[]
+}
+//export type UserRole = 'user' | 'moderator' | 'administrator' | 'master'
+
+interface Role {
+   id: string
+   name: 'user' | 'moderator' | 'administrator' | 'master'
+   systems: string
+   pathSystems: string
 }

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-export default function FormPagesLayout({ children }: { children: React.JSX.Element }) {
+export default function FormPagesLayout({ children }: { children: React.JSX.Element | React.ReactNode }) {
    return (
       <main className='flex flex-col items-center justify-between p-24 min-h-screen'>
          <div className='z-10 w-full max-w-5xl items-center justify-end font-mono text-sm lg:flex'>
