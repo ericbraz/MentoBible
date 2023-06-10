@@ -21,8 +21,8 @@ export default function SignUpForm() {
 
    const router = useRouter()
    async function signUpValidation() {
-      await AuthService.signUpValidation(formValues)
-      router.push('/signup/email-verification')
+      const validated = await AuthService.signUpValidation(formValues)
+      validated && router.push('/signup/email-verification')
    }
 
    return (

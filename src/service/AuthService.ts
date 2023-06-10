@@ -59,6 +59,8 @@ class AuthService {
          await user.save()
 
          await signOut(auth)
+
+         return true
       } catch (error) {
          alert(error)
       }
