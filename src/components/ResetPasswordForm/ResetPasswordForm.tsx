@@ -1,17 +1,18 @@
 'use client'
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { HiOutlineUser, HiOutlineMail, HiOutlineLockClosed } from 'react-icons/hi'
+import { useState } from 'react'
+import { HiOutlineLockClosed } from 'react-icons/hi'
 import InputField from '../book/verse/InputField'
 import InputSubmit from '../book/verse/InputSubmit'
+import { useRouter, useSearchParams } from 'next/navigation'
 import AuthService from '@/service/AuthService'
+import { confirmPasswordReset } from 'firebase/auth'
+import { auth } from '@/config/firebase'
 
-export default function SignUpForm() {
+export default function ResetPasswordForm() {
+   const router = useRouter()
+   const params = useSearchParams()
+
    const [formValues, setFormValues] = useState({
-      firstName: '',
-      lastName: '',
-      username: '',
-      email: '',
       password: '',
       confirmPassword: '',
    })
@@ -19,54 +20,35 @@ export default function SignUpForm() {
       setFormValues({ ...formValues, [event.target.name]: [event.target.value] })
    }
 
-   const router = useRouter()
-   async function signUpValidation() {
-      const validated = await AuthService.signUpValidation(formValues)
-      validated && router.push('/email-verification')
+   async function resetPassword() {
+      const validation = AuthService.checkPassword(formValues)
+      const oobCode = params.get('oobCode')
+
+      if (validation && oobCode) {
+         try {
+            await confirmPasswordReset(auth, oobCode, formValues.password[0])
+            validation && router.push('/login')
+         } catch (error) {
+            alert('Erro em reset form')
+            alert(error)
+         }
+      }
    }
 
    return (
       <>
          <div className='top-header'>
-            <header className='text-[30px] flex justify-center py-3 px-0'>Cadastrar</header>
+            <header className='text-[26px] flex justify-center py-3 px-0'>
+               Cadastre a nova senha
+            </header>
          </div>
 
          <form
             onSubmit={(event) => {
                event.preventDefault()
-               signUpValidation()
+               resetPassword()
             }}
          >
-            <InputField
-               type='firstName'
-               placeholder='Nome'
-               name='firstName'
-               value={formValues.firstName}
-               onChange={handleEvent}
-               required
-            >
-               <HiOutlineUser />
-            </InputField>
-            <InputField
-               type='lastName'
-               placeholder='Sobrenome'
-               name='lastName'
-               value={formValues.lastName}
-               onChange={handleEvent}
-               required
-            >
-               <HiOutlineUser />
-            </InputField>
-            <InputField
-               type='email'
-               placeholder='E-mail'
-               name='email'
-               value={formValues.email}
-               onChange={handleEvent}
-               required
-            >
-               <HiOutlineMail />
-            </InputField>
             <InputField
                type='password'
                placeholder='Senha'
@@ -87,7 +69,8 @@ export default function SignUpForm() {
             >
                <HiOutlineLockClosed />
             </InputField>
-            <InputSubmit value='Cadastrar' />
+
+            <InputSubmit value='Cadastrar senha' />
          </form>
 
          <div className='bottom flex flex-row justify-between text-sm mt-3'>
