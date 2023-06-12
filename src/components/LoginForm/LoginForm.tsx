@@ -18,16 +18,23 @@ export default function LoginForm() {
    const { setUserState } = useUserState()
 
    async function signIn(email: string, password: string) {
-      const user = await AuthService.signIn(email, password)
-      setUserState(userStateFormatter(user))
-      router.push('/dashboard')
+      const user = (await AuthService.signIn(email, password)) || null
+      if (user) {
+         setUserState(userStateFormatter(user))
+         router.push('/dashboard')
+      }
    }
 
    return (
       <>
          <div className='top-header'>
             <span className='text-sm flex justify-center py-3 px-0'>
-               <Link href='/signup'>Ainda não possui uma conta?</Link>
+               <Link
+                  href='/signup'
+                  className='text-[#2200cc] hover:text-slate-800 visited:text-purple-800 underline'
+               >
+                  Ainda não possui uma conta?
+               </Link>
             </span>
             <header className='text-[30px] flex justify-center py-3 px-0'>Login</header>
          </div>
@@ -65,7 +72,14 @@ export default function LoginForm() {
                <label htmlFor='check'>Lembre-me</label>
             </div>
             <div className='right'>
-               <label>Esqueceu a senha?</label>
+               <label>
+                  <Link
+                     href='/request-reset-password'
+                     className='text-[#2200cc] hover:text-slate-800 visited:text-purple-800 underline'
+                  >
+                     Esqueceu a senha?
+                  </Link>
+               </label>
             </div>
          </div>
       </>

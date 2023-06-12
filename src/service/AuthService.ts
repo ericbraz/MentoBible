@@ -5,9 +5,11 @@ import {
    User as FirebaseUser,
    createUserWithEmailAndPassword,
    sendEmailVerification,
+   sendPasswordResetEmail,
    signInWithEmailAndPassword,
    signOut,
 } from 'firebase/auth'
+//import * as admin from 'firebase-admin'
 
 interface SignUpData {
    firstName: string
@@ -19,13 +21,17 @@ interface SignUpData {
 
 class AuthService {
    public static async signIn(email: string, password: string) {
-      return await signInWithEmailAndPassword(auth, email, password).then((credentials) => {
-         const user = credentials.user
-         if (!user.emailVerified) {
-            throw new Error('User does not exist')
-         }
-         return user as FirebaseUser
-      })
+      try {
+         return await signInWithEmailAndPassword(auth, email, password).then((credentials) => {
+            const user = credentials.user
+            if (!user.emailVerified) {
+               throw new Error('User does not exist')
+            }
+            return user as FirebaseUser
+         })
+      } catch (error) {
+         alert(error)
+      }
    }
 
    public static async signUpValidation({
@@ -36,16 +42,10 @@ class AuthService {
       confirmPassword,
    }: SignUpData) {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/
-      const passRegex =
-         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':\"\\|,.<>/?]).{8,}$/
 
       try {
          if (!emailRegex.test(email)) throw new Error('Invalid email')
-         if (!passRegex.test(password))
-            throw new Error(
-               'Password must contain at least 8 characters and:\n\u00A0\u00A01 upper case letter A-Z\n\u00A0\u00A01 lower case letter a-z\n\u00A0\u00A01 number\n\u00A0\u00A01 special character: !@#$%^&*()_+-=[ ]{};\':"\\|,.<>/?'
-            )
-         if (password[0] !== confirmPassword[0]) throw new Error('Passwords must match')
+         AuthService.checkPassword({ password, confirmPassword })
 
          const credentials = await createUserWithEmailAndPassword(auth, email[0], password[0])
          const firebaseUser = credentials.user
@@ -74,6 +74,15 @@ class AuthService {
       }
    }
 
+   public static async requestResetPassword(email: string) {
+      try {
+         await sendPasswordResetEmail(auth, email)
+         return true
+      } catch (error) {
+         alert(error)
+      }
+   }
+
    public static authStateListener(func: (newUserState: FormattedUserState) => void) {
       return auth.onAuthStateChanged(
          (currentUser) => {
@@ -84,6 +93,30 @@ class AuthService {
             alert(error)
          }
       )
+   }
+
+   public static checkPassword({
+      password,
+      confirmPassword,
+   }: {
+      password: string
+      confirmPassword: string
+   }) {
+      const passRegex =
+         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':\"\\|,.<>/?]).{8,}$/
+
+      try {
+         if (!passRegex.test(password))
+            throw new Error(
+               'Password must contain at least 8 characters and:\n\u00A0\u00A01 upper case letter A-Z\n\u00A0\u00A01 lower case letter a-z\n\u00A0\u00A01 number\n\u00A0\u00A01 special character: !@#$%^&*()_+-=[ ]{};\':"\\|,.<>/?'
+            )
+         if (password[0] !== confirmPassword[0]) throw new Error('Passwords must match')
+
+         return true
+      } catch (error) {
+         alert('Erro em AuthService')
+         alert(error)
+      }
    }
 }
 
