@@ -6,7 +6,6 @@ export default function EmailFormsLayout({ children }: { children: React.ReactNo
       <div className='flex flex-col flex-grow items-center justify-center bg-white rounded-xl min-h-[500px]'>
          <div className='flex items-center justify-center bg-[--lighter-blue] rounded-t-xl min-h-[45px] w-full'></div>
          <div className='flex flex-col items-center justify-around min-h-[380px] w-full'>
-            <h2 className='text-lg font-semibold px-5 pt-2'>Enviamos um e-mail pra você</h2>
             <Image
                src='/email.gif'
                alt='Open E-mail Icon'
@@ -16,7 +15,7 @@ export default function EmailFormsLayout({ children }: { children: React.ReactNo
                priority
             />
             <p className='text-center px-5'>{children}</p>
-            <Link href='/' className='bg-[--darker-blue] text-white px-7 py-2 rounded-lg mb-2'>
+            <Link href='/login' className='bg-[--darker-blue] text-white px-7 py-2 rounded-lg mb-2'>
                Acessar MentoBible
             </Link>
          </div>
