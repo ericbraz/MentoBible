@@ -21,13 +21,13 @@ export default function ResetPasswordForm() {
    }
 
    async function resetPassword() {
-      const validation = AuthService.checkPassword(formValues)
       const oobCode = params.get('oobCode')
 
-      if (validation && oobCode) {
+      if (oobCode) {
          try {
+            AuthService.checkPassword(formValues)
             await confirmPasswordReset(auth, oobCode, formValues.password[0])
-            validation && router.push('/login')
+            router.push('/login')
          } catch (error) {
             alert('Erro em reset form')
             alert(error)
