@@ -9,7 +9,6 @@ import {
    signInWithEmailAndPassword,
    signOut,
 } from 'firebase/auth'
-//import * as admin from 'firebase-admin'
 
 interface SignUpData {
    firstName: string
@@ -105,18 +104,11 @@ class AuthService {
       const passRegex =
          /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':\"\\|,.<>/?]).{8,}$/
 
-      try {
-         if (!passRegex.test(password))
-            throw new Error(
-               'Password must contain at least 8 characters and:\n\u00A0\u00A01 upper case letter A-Z\n\u00A0\u00A01 lower case letter a-z\n\u00A0\u00A01 number\n\u00A0\u00A01 special character: !@#$%^&*()_+-=[ ]{};\':"\\|,.<>/?'
-            )
-         if (password[0] !== confirmPassword[0]) throw new Error('Passwords must match')
-
-         return true
-      } catch (error) {
-         alert('Erro em AuthService')
-         alert(error)
-      }
+      if (!passRegex.test(password))
+         throw new Error(
+            'Password must contain at least 8 characters and:\n\u00A0\u00A01 upper case letter A-Z\n\u00A0\u00A01 lower case letter a-z\n\u00A0\u00A01 number\n\u00A0\u00A01 special character: !@#$%^&*()_+-=[ ]{};\':"\\|,.<>/?'
+         )
+      if (password[0] !== confirmPassword[0]) throw new Error('Passwords must match')
    }
 }
 
