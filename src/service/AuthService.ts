@@ -53,6 +53,7 @@ class AuthService {
             firstName: firstName[0],
             lastName: lastName[0],
             email: firebaseUser.email as string,
+            active: true
          })
          await sendEmailVerification(firebaseUser)
          await user.save()

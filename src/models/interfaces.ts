@@ -95,8 +95,6 @@ interface LessonsCompletion {
 export interface Role {
    id: string
    name: 'user' | 'moderator' | 'administrator' | 'master'
-   systems: {
-      systemName: string
-      pathSystems: string
-   }[]
+   systems: string
+   pathSystems: string
 }
