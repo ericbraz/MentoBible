@@ -67,10 +67,7 @@ export default function LoginForm() {
          </form>
 
          <div className='bottom flex flex-row justify-between text-sm mt-3'>
-            <div className='left flex'>
-               <input type='checkbox' id='check' />
-               <label htmlFor='check'>Lembre-me</label>
-            </div>
+            <div className='left flex'></div>
             <div className='right'>
                <label>
                   <Link
