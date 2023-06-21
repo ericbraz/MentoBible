@@ -52,7 +52,7 @@ export default function RequestResetPasswordForm() {
             <div className='right'>
                <button
                   onClick={() => router.back()}
-                  className='text-[#2200cc] hover:text-slate-800 visited:text-purple-800 underline'
+                  className='text-sky-400 hover:text-slate-300 visited:text-purple-300 underline'
                >
                   Voltar
                </button>

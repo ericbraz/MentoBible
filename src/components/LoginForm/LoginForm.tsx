@@ -31,7 +31,7 @@ export default function LoginForm() {
             <span className='text-sm flex justify-center py-3 px-0'>
                <Link
                   href='/signup'
-                  className='text-[#2200cc] hover:text-slate-800 visited:text-purple-800 underline'
+                  className='text-sky-400 hover:text-slate-300 visited:text-purple-300 underline'
                >
                   Ainda não possui uma conta?
                </Link>
@@ -75,7 +75,7 @@ export default function LoginForm() {
                <label>
                   <Link
                      href='/request-reset-password'
-                     className='text-[#2200cc] hover:text-slate-800 visited:text-purple-800 underline'
+                     className='text-sky-400 hover:text-slate-300 visited:text-purple-300 underline'
                   >
                      Esqueceu a senha?
                   </Link>
