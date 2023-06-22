@@ -9,12 +9,11 @@ export default function EmailFormsLayout({ children }: { children: React.ReactNo
             <Image
                src='/email.gif'
                alt='Open E-mail Icon'
-               className='dark:invert'
                width={150}
                height={36}
                priority
             />
-            <p className='text-center px-5'>{children}</p>
+            <p className='text-center text-black px-5'>{children}</p>
             <Link href='/login' className='bg-[--darker-blue] text-white px-7 py-2 rounded-lg mb-2'>
                Acessar MentoBible
             </Link>
