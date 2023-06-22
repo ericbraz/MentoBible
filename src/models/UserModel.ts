@@ -39,6 +39,7 @@ export default class UserModel implements User {
    public get firstName()           { return this.user.firstName }
    public get lastName()            { return this.user.lastName }
    public get email()               { return this.user.email }
+   public get active()              { return this.user.active }
    public get photoURL()            { return this.user.photoURL }
    public get signUpDate()          { return this.user.signUpDate }
    public get userRole()            { return this.user.userRoleIds }

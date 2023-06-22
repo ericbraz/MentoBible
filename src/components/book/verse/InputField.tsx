@@ -12,9 +12,9 @@ export default function InputField(props: InputFieldProps) {
    const { type, placeholder, name, value, onChange, required, children } = props
 
    return (
-      <div className='input-field flex flex-col'>
+      <div className='input-field flex flex-col text-black'>
          <input
-            className='input h-[45px] w-full border-0 outline-none rounded-3xl p-0 pl-11 bg-[rgba(255,255,255,0.5)]'
+            className='input h-[45px] w-full border-0 outline-none rounded-3xl p-0 pl-11 bg-[rgba(255,255,255,0.6)] placeholder-black'
             type={type}
             placeholder={placeholder}
             name={name}

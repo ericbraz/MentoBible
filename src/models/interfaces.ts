@@ -75,17 +75,24 @@ export interface User {
    firstName: string
    lastName: string
    email: string
+   active: boolean
    userRoleIds?: string[]
    photoURL?: string
    signUpDate?: Date
    courseIds?: string[]
-   lessonCompletionIds?: string[]
+   lessonCompletionIds?: LessonsCompletion[]
    testCompletionIds?: string[]
    performanceIds?: string[]
 }
-//export type UserRole = 'user' | 'moderator' | 'administrator' | 'master'
 
-interface Role {
+interface LessonsCompletion {
+   id: string
+   userId: string
+   lessonId: string
+   completionDate: Date
+}
+
+export interface Role {
    id: string
    name: 'user' | 'moderator' | 'administrator' | 'master'
    systems: string
