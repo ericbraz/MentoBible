@@ -18,7 +18,7 @@ export default function ScrollableElement() {
    return (
       <>
          {sliderContent.map((slider, idx) => (
-            <div className='w-full'>
+            <div key={slider.title} className='w-full'>
                <h2 className={`text-2xl font-semibold ${idx ? 'mt-12' : 'mt-0'} mb-3`}>
                   {slider.title}
                </h2>
