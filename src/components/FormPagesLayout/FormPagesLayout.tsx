@@ -1,17 +1,11 @@
-import Image from 'next/image'
+import Logo from '../book/verse/Logo'
 
 export default function FormPagesLayout({ children }: { children: React.JSX.Element | React.ReactNode }) {
    return (
       <main className='flex flex-col items-center justify-between p-24 min-h-screen'>
          <div className='z-10 w-full max-w-5xl items-center justify-end font-mono text-sm lg:flex'>
             <div className='fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-black via-black dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none'>
-               <Image
-                  src='/mentobiblecollege.png'
-                  alt='Mento Bible Logo'
-                  width={150}
-                  height={36}
-                  priority
-               />
+               <Logo />
             </div>
          </div>
 

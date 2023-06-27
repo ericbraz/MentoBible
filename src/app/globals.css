@@ -40,6 +40,7 @@ body {
    color: rgb(var(--foreground-rgb));
    background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
       rgb(var(--background-start-rgb));
+   overflow-x: hidden;
 }
 
 .box .container .input-field .input,
@@ -48,4 +49,13 @@ body {
 }
 .box .container .input-field .submit:hover {
    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.3);
+}
+
+.top-image-gradient {
+   background: rgb(20, 17, 17);
+   background: linear-gradient(0deg, rgba(20, 17, 17, 1) 0%, rgba(35, 35, 41, 0.7) 70%); /* rgba(14, 13, 42, 0.7) */
+}
+.below-image-gradient {
+   background: rgb(20, 17, 17);
+   background: linear-gradient(180deg, rgba(20, 17, 17, 1) 0%, rgba(20, 17, 17, 0) 90%);
 }
