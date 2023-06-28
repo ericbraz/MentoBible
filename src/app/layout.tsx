@@ -12,8 +12,8 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
    return (
       <html lang='en'>
-         <body className={inter.className}>
-            <div className=' min-h-screen'>
+         <body className={`${inter.className} h-fit`}>
+            <div className='overflow-hidden min-h-screen'>
                <ReduxProvider>{children}</ReduxProvider>
             </div>
          </body>
