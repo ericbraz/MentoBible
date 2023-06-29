@@ -6,7 +6,7 @@ import { BsCheckCircle, BsInfoCircle, BsX, BsXCircle } from 'react-icons/bs'
 type BgColors = 'bg-[#b6f8c4]' | 'bg-[#b2e6f5]' | 'bg-[#ffb7b7]'
 
 export default function ToastNotification() {
-   const { toastState } = useToastState()
+   const { toastState, turnToastOff } = useToastState()
    const { title, description, type, visibility } = toastState
 
    const [backgroundHex, setBackgroundHex] = useState<BgColors>('bg-[#b2e6f5]')
@@ -23,6 +23,7 @@ export default function ToastNotification() {
          className={`${
             visibility ? 'flex items-center justify-center' : 'hidden'
          } fixed right-0 bottom-28 left-0 max-h-fit z-[1000]`}
+         onClick={turnToastOff}
       >
          <div
             className={`${backgroundHex} rounded-lg h-fit text-black fixed flex flex-row items-center justify-center px-5 py-3 gap-5`}
@@ -44,7 +45,9 @@ export default function ToastNotification() {
                      ))}
                   </p>
                </div>
-               <div className='flex items-center justify-center text-2xl'>{/* <BsX /> */}</div>
+               <div className='flex items-center justify-center text-2xl'>
+                  <BsX />
+               </div>
             </div>
          </div>
       </div>

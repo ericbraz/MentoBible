@@ -1,6 +1,8 @@
 import { ReduxToastState, changeToastState, getToastState } from '@/store/toastSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
+const DEFAULT_TIMER = 8000
+
 export default function useToastState() {
    const toastState = useSelector(getToastState)
    const dispatch = useDispatch()
@@ -18,9 +20,20 @@ export default function useToastState() {
                   visibility: false,
                })
             ),
-         timer ?? 8000
+         timer ?? DEFAULT_TIMER
       )
    }
 
-   return { toastState, setToastState }
+   function turnToastOff() {
+      dispatch(
+         changeToastState({
+            title: '',
+            description: '',
+            type: 'info',
+            visibility: false,
+         })
+      )
+   }
+
+   return { toastState, setToastState, turnToastOff }
 }
