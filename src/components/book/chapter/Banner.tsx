@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { possibleBanners } from '@/app/(dashboard)/dashboard/imageArray'
 import Image from 'next/image'
+import useToastState from '@/hooks/useToastState'
+import { TOAST_MESSAGE } from '@/constants/tempToastMessage'
 
 export default function Banner() {
    const [index, setIndex] = useState(0)
@@ -11,6 +13,8 @@ export default function Banner() {
             setIndex(nextIndex)
          }, 10000)
    }, [index])
+
+   const { setToastState } = useToastState()
 
    return (
       <div>
@@ -27,7 +31,10 @@ export default function Banner() {
                      {image.title}
                   </h1>
                   <p className='max-w-xl text-slate-200 text-sm 550:text-base'>{image.text}</p>
-                  <button className='bg-sky-400 hover:bg-slate-300 text-zinc-900 font-semibold mt-16 text-sm 550:text-base py-2 550:py-3 px-4 550:px-7 max-w-fit rounded-lg transition duration-300'>
+                  <button
+                     className='bg-sky-400 hover:bg-slate-300 text-zinc-900 font-semibold mt-16 text-sm 550:text-base py-2 550:py-3 px-4 550:px-7 max-w-fit rounded-lg transition duration-300'
+                     onClick={() => setToastState(TOAST_MESSAGE)}
+                  >
                      {image.CTA.toUpperCase()}
                   </button>
                </div>
