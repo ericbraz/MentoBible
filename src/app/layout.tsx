@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang='en'>
          <body className={`${inter.className} h-fit`}>
             <ReduxProvider>
-               <div className='overflow-hidden min-h-screen'>{children}</div>
+               <div className='grid overflow-hidden min-h-screen h-full'>{children}</div>
 
                <ToastNotification />
             </ReduxProvider>

@@ -1,8 +1,7 @@
 import { auth } from '@/config/firebase'
 import UserModel from '@/models/UserModel'
-import { FormattedUserState, userStateFormatter } from '@/utils/authUserHelper'
 import {
-   User as FirebaseUser,
+   User as FbUser,
    createUserWithEmailAndPassword,
    sendEmailVerification,
    sendPasswordResetEmail,
@@ -17,6 +16,8 @@ interface SignUpData {
    password: string
    confirmPassword: string
 }
+
+type FirebaseUser = FbUser
 
 class AuthService {
    public static async signIn(email: string, password: string) {
@@ -53,7 +54,7 @@ class AuthService {
             firstName: firstName[0],
             lastName: lastName[0],
             email: firebaseUser.email as string,
-            active: true
+            active: true,
          })
          await sendEmailVerification(firebaseUser)
          await user.save()
@@ -83,10 +84,10 @@ class AuthService {
       }
    }
 
-   public static authStateListener(func: (newUserState: FormattedUserState) => void) {
+   public static authStateListener(func: (newUserState: FirebaseUser) => void) {
       return auth.onAuthStateChanged(
          (currentUser) => {
-            func(userStateFormatter(currentUser))
+            func(currentUser as FirebaseUser)
          },
          (error) => {
             console.log(error)
@@ -110,6 +111,10 @@ class AuthService {
             'Password must contain at least 8 characters and:\n\u00A0\u00A01 upper case letter A-Z\n\u00A0\u00A01 lower case letter a-z\n\u00A0\u00A01 number\n\u00A0\u00A01 special character: !@#$%^&*()_+-=[ ]{};\':"\\|,.<>/?'
          )
       if (password[0] !== confirmPassword[0]) throw new Error('Passwords must match')
+   }
+
+   public static getUserData(id: string) {
+      return UserModel.find(id)
    }
 }
 

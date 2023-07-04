@@ -108,7 +108,7 @@ export default function TopNavbar() {
                      <BsFillPersonVcardFill /> Perfil
                   </div>
                   <Link
-                     href='/admin'
+                     href='/admin/home'
                      className='flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black mb-[0.4rem]'
                   >
                      <BsClipboard2DataFill /> Administração

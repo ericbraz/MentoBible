@@ -3,16 +3,16 @@ import useToastState from '@/hooks/useToastState'
 import { Fragment, useEffect, useState } from 'react'
 import { BsCheckCircle, BsInfoCircle, BsX, BsXCircle } from 'react-icons/bs'
 
-type BgColors = 'bg-[#b6f8c4]' | 'bg-[#b2e6f5]' | 'bg-[#ffb7b7]'
+type BgColors = 'bg-[#b6f8c4]' | 'bg-zinc-200' | 'bg-[#ffb7b7]'
 
 export default function ToastNotification() {
    const { toastState, turnToastOff } = useToastState()
    const { title, description, type, visibility } = toastState
 
-   const [backgroundHex, setBackgroundHex] = useState<BgColors>('bg-[#b2e6f5]')
+   const [backgroundHex, setBackgroundHex] = useState<BgColors>('bg-zinc-200')
    useEffect(() => {
       type === 'success' && setBackgroundHex('bg-[#b6f8c4]')
-      type === 'info' && setBackgroundHex('bg-[#b2e6f5]')
+      type === 'info' && setBackgroundHex('bg-zinc-200')
       type === 'error' && setBackgroundHex('bg-[#ffb7b7]')
    }, [type])
 

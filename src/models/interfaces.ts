@@ -1,19 +1,25 @@
 export interface Category {
    id: string
    name: string
+   creationDate?: Date
    thumbnailURL?: string // thumbnail image
    coverURL?: string // cover image
+   userCreatorId: string
 }
+
+export type CourseCreationType = 'creation' | 'active' | 'inactive'
 
 export interface Course {
    id: string
    categoryId: string
    name: string
-   isActive: 'creation' | 'active' | 'inactive'
+   isActive: CourseCreationType
+   creationDate?: Date
    isModular?: boolean
    description?: string
    thumbnailURL?: string
    coverURL?: string
+   userCreatorId: string
 }
 
 export interface Chapter {
@@ -21,10 +27,12 @@ export interface Chapter {
    courseId: string
    name: string
    chapterSequence: number
-   isActive: 'creation' | 'active' | 'inactive'
+   isActive: CourseCreationType
+   creationDate?: Date
    description?: string
    thumbnailURL?: string
    coverURL?: string
+   userCreatorId: string
 }
 
 export interface Lesson {
@@ -35,8 +43,10 @@ export interface Lesson {
    title: string
    videoURL: string
    lessonSequence: number
-   isActive: 'creation' | 'active' | 'inactive'
+   isActive: CourseCreationType
+   creationDate?: Date
    coverURL?: string
+   userCreatorId: string
    thumbnailURL?: string
    description?: string
    complementaryMaterialURL?: string

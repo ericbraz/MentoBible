@@ -1,11 +1,12 @@
-import { User } from 'firebase/auth'
+import { User } from '@/models/interfaces'
+import { User as FbUser } from 'firebase/auth'
 
 export interface FormattedUserState {
    userId: string | null
    email: string | null
 }
 
-export function userStateFormatter(user: User | null): FormattedUserState {
+export function userStateFormatter(user: FbUser | null): FormattedUserState {
    return user
       ? {
            userId: user.uid,
@@ -14,5 +15,22 @@ export function userStateFormatter(user: User | null): FormattedUserState {
       : {
            userId: null,
            email: null,
+        }
+}
+
+export function userStateData(user: User | null): User {
+   return user
+      ? user
+      : {
+           id: '',
+           firstName: '',
+           lastName: '',
+           email: '',
+           active: false,
+           userRoleIds: undefined,
+           photoURL: undefined,
+           signUpDate: undefined,
+           courseIds: undefined,
+           lessonCompletionIds: undefined,
         }
 }
