@@ -14,7 +14,7 @@ export default function AdminSectionCourseCreation() {
    return (
       <>
          {contentOptions.map((option) => (
-            <AdminSectionContentDevider title={option.title}>
+            <AdminSectionContentDevider key={option.title} title={option.title}>
                {option.content}
             </AdminSectionContentDevider>
          ))}
