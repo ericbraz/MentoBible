@@ -104,7 +104,6 @@ export default function AdminCourseCategoryCreation() {
                   { value: 'true', option: 'Sim' },
                   { value: 'false', option: 'Não' },
                ]}
-               required
                formality
             >
                Curso contém módulos?

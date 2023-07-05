@@ -16,10 +16,10 @@ export default function TextEditor({
                {label}
             </label>
          </div>
-         <div id={id} className={`col-span-5 w-full`}>
+         <div id={id} className={`col-span-5`}>
             <textarea
                value={value}
-               className={`block col-span-5 p-7`}
+               className={`block col-span-5 p-7 h-64 w-[600px] resize-none`}
                onChange={onChange}
                cols={60}
                rows={8}

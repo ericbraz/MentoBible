@@ -76,6 +76,10 @@ export default function InputField(props: InputFieldProps) {
             <select
                className='input h-[45px] w-full border border-slate-400 rounded-lg outline-none px-5 bg-[rgba(255,255,255,0.6)]'
                onChange={onChange}
+               id={id}
+               placeholder={placeholder}
+               name={name}
+               required={required}
             >
                <option value=''></option>
                {select?.map((options) => (
