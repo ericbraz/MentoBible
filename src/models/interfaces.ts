@@ -1,21 +1,25 @@
 export interface Category {
    id: string
    name: string
-   // tests may reffer only to course categories that have this value as true
-   testingType: boolean
-   thumbnailURL?: string /* thumbnail image */
-   coverURL?: string /* cover image */
+   creationDate?: Date
+   thumbnailURL?: string // thumbnail image
+   coverURL?: string // cover image
+   userCreatorId: string
 }
+
+export type CourseCreationType = 'creation' | 'active' | 'inactive'
 
 export interface Course {
    id: string
    categoryId: string
    name: string
-   testing: boolean
-   testingCompletion?: number // percentage of completion of the course so the user may be ellegible to make the test
+   isActive: CourseCreationType
+   creationDate?: Date
+   isModular?: boolean
    description?: string
    thumbnailURL?: string
    coverURL?: string
+   userCreatorId: string
 }
 
 export interface Chapter {
@@ -23,51 +27,29 @@ export interface Chapter {
    courseId: string
    name: string
    chapterSequence: number
-   testing: boolean
-   testingCompletion?: number
+   isActive: CourseCreationType
+   creationDate?: Date
    description?: string
    thumbnailURL?: string
    coverURL?: string
+   userCreatorId: string
 }
 
 export interface Lesson {
    id: string
-   chapterId: string
+   courseId: string | null
+   chapterId: string | null
    name: string
    title: string
    videoURL: string
    lessonSequence: number
-   description?: string
-   thumbnailURL?: string
+   isActive: CourseCreationType
+   creationDate?: Date
    coverURL?: string
-}
-
-export interface Test {
-   id: string
-   // at least one of ids below must be null
-   // so there must be a verification in the code
-   courseId: string | null
-   chapterId: string | null
-   testContent: TestContent[]
-   courseEligibility: 0.7 | 0.8 | 0.9 | 1
-}
-
-export interface TestContent {
-   content: [
-      { question: string },
-      { answers: string[] } /* multiple choice */,
-      { correctAnswer: boolean[] } /* only one true element */
-   ]
-}
-
-export interface TestPerformance {
-   id: string
-   userId: string
-   // at least one of ids below must be null
-   // so there must be a verification in the code
-   courseId: string | null
-   chapterId: string | null
-   grade: number
+   userCreatorId: string
+   thumbnailURL?: string
+   description?: string
+   complementaryMaterialURL?: string
 }
 
 export interface User {
@@ -80,12 +62,10 @@ export interface User {
    photoURL?: string
    signUpDate?: Date
    courseIds?: string[]
-   lessonCompletionIds?: LessonsCompletion[]
-   testCompletionIds?: string[]
-   performanceIds?: string[]
+   lessonCompletionIds?: string[]
 }
 
-interface LessonsCompletion {
+export interface LessonsCompletion {
    id: string
    userId: string
    lessonId: string
@@ -95,6 +75,11 @@ interface LessonsCompletion {
 export interface Role {
    id: string
    name: 'user' | 'moderator' | 'administrator' | 'master'
-   systems: string
-   pathSystems: string
+   idSystem: string[]
+}
+
+export interface System {
+   id: string
+   systemName: string
+   systemPath: string
 }

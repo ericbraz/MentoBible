@@ -16,7 +16,7 @@ export default function ResetPasswordForm() {
       password: '',
       confirmPassword: '',
    })
-   function handleEvent(event: React.ChangeEvent<HTMLInputElement>) {
+   function handleEvent(event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) {
       setFormValues({ ...formValues, [event.target.name]: [event.target.value] })
    }
 

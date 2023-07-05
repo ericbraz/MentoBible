@@ -16,6 +16,7 @@ import AuthService from '@/service/AuthService'
 import useDifferentScreens from '@/hooks/useDifferentScreens'
 import useToastState from '@/hooks/useToastState'
 import { TOAST_MESSAGE } from '@/constants/tempToastMessage'
+import Link from 'next/link'
 
 export default function TopNavbar() {
    const pathname = usePathname()
@@ -48,14 +49,14 @@ export default function TopNavbar() {
             <Logo />
          </div>
          <nav className='hidden 550:flex 550:flex-1 550:gap-5 font-medium'>
-            <div
+            <Link
+               href='/dashboard'
                className={`flex flex-row hover:underline cursor-pointer ${
                   pathname === '/dashboard' ? 'text-sky-400' : 'text-slate-300'
                }`}
-               onClick={() => setToastState(TOAST_MESSAGE)}
             >
                Início {/* dashboard */}
-            </div>{' '}
+            </Link>{' '}
             <div
                className={`flex flex-row hover:underline cursor-pointer ${
                   pathname === '/courses' ? 'text-sky-400' : 'text-slate-300'
@@ -88,12 +89,12 @@ export default function TopNavbar() {
                      profileMenu ? 'flex flex-col' : 'hidden'
                   } absolute top-10 right-0 py-2 w-60 h-fit bg-slate-900 text-white rounded-b-lg rounded-l-lg`}
                >
-                  <div
+                  <Link
+                     href='/dashboard'
                      className='550:hidden flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black'
-                     onClick={() => setToastState(TOAST_MESSAGE)}
                   >
                      <BsFillHouseDoorFill /> Início
-                  </div>
+                  </Link>
                   <div
                      className='550:hidden flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black'
                      onClick={() => setToastState(TOAST_MESSAGE)}
@@ -106,12 +107,12 @@ export default function TopNavbar() {
                   >
                      <BsFillPersonVcardFill /> Perfil
                   </div>
-                  <div
+                  <Link
+                     href='/admin/home'
                      className='flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black mb-[0.4rem]'
-                     onClick={() => setToastState(TOAST_MESSAGE)}
                   >
                      <BsClipboard2DataFill /> Administração
-                  </div>
+                  </Link>
                   <div className='pt-[0.4rem] border-t-[1px]'>
                      <div
                         className='flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black'

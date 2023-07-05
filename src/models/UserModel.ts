@@ -45,8 +45,6 @@ export default class UserModel implements User {
    public get userRole()            { return this.user.userRoleIds }
    public get courseIds()           { return this.user.courseIds }
    public get lessonCompletionIds() { return this.user.lessonCompletionIds }
-   public get testCompletionIds()   { return this.user.testCompletionIds }
-   public get performance()         { return this.user.performanceIds }
 
    private isValid() {
       if (!this.id && !this.firstName && !this.lastName && !this.email) return false

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { HiOutlineUser, HiOutlineLockClosed } from 'react-icons/hi'
 import Link from 'next/link'
@@ -7,7 +7,6 @@ import InputField from '../book/verse/InputField'
 import InputSubmit from '../book/verse/InputSubmit'
 import useUserState from '@/hooks/useUserState'
 import AuthService from '@/service/AuthService'
-import { userStateFormatter } from '@/utils/authUserHelper'
 
 export default function LoginForm() {
    const router = useRouter()
@@ -20,7 +19,7 @@ export default function LoginForm() {
    async function signIn(email: string, password: string) {
       const user = (await AuthService.signIn(email, password)) || null
       if (user) {
-         setUserState(userStateFormatter(user))
+         setUserState(user)
          router.push('/dashboard')
       }
    }
