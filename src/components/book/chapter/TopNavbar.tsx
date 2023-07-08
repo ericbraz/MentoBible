@@ -17,6 +17,7 @@ import useDifferentScreens from '@/hooks/useDifferentScreens'
 import useToastState from '@/hooks/useToastState'
 import { TOAST_MESSAGE } from '@/constants/tempToastMessage'
 import Link from 'next/link'
+import useAccessSystems from '@/hooks/useAccessSystems'
 
 export default function TopNavbar() {
    const pathname = usePathname()
@@ -40,6 +41,19 @@ export default function TopNavbar() {
    const { smallerScreens } = useDifferentScreens()
 
    const { setToastState } = useToastState()
+
+   const { accessibleSystemsObject, accessibleSystemsList } = useAccessSystems()
+   function userAuthorization(url: string) {
+      return (
+         accessibleSystemsList[0] !== undefined &&
+         accessibleSystemsList[0] !== '' &&
+         accessibleSystemsList.some((system) => url.includes(system))
+      )
+   }
+   const [isUserAuthorized, setIsUserAuthorized] = useState(false)
+   useEffect(() => {
+      setIsUserAuthorized(userAuthorization('/admin/home'))
+   }, [accessibleSystemsObject[0]])
 
    return (
       <header
@@ -107,12 +121,14 @@ export default function TopNavbar() {
                   >
                      <BsFillPersonVcardFill /> Perfil
                   </div>
-                  <Link
-                     href='/admin/home'
-                     className='flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black mb-[0.4rem]'
-                  >
-                     <BsClipboard2DataFill /> Administração
-                  </Link>
+                  {isUserAuthorized && (
+                     <Link
+                        href='/admin/home'
+                        className='flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black mb-[0.4rem]'
+                     >
+                        <BsClipboard2DataFill /> Administração
+                     </Link>
+                  )}
                   <div className='pt-[0.4rem] border-t-[1px]'>
                      <div
                         className='flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black'

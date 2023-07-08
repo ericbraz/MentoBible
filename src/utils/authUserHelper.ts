@@ -1,4 +1,4 @@
-import { User } from '@/models/interfaces'
+import { System, User } from '@/models/interfaces'
 import { User as FbUser } from 'firebase/auth'
 
 export interface FormattedUserState {
@@ -33,4 +33,17 @@ export function userStateData(user: User | null): User {
            courseIds: undefined,
            lessonCompletionIds: undefined,
         }
+}
+
+export function systemStateData(systems?: System[] | null | undefined) {
+   if (!systems || systems?.length === 0)
+      return [
+         {
+            id: '',
+            systemName: '',
+            systemPath: '',
+         },
+      ]
+
+   return systems
 }

@@ -12,8 +12,16 @@ const store = configureStore({
    middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
          serializableCheck: {
-            ignoredActions: ['userState/attributeUserData', 'coursesState/rescueCategoriesState'],
-            ignoredPaths: ['coursesState.categories'],
+            ignoredActions: [
+               'userState/attributeUserData',
+               'coursesState/rescueCategoriesState',
+               'userState/findUserSystems',
+            ],
+            ignoredPaths: [
+               'coursesState.categories',
+               'userState.data.signUpDate',
+               'userState.systems',
+            ],
          },
       }),
 })

@@ -10,16 +10,16 @@ import {
    BsFillChatLeftQuoteFill,
    BsPersonFillGear,
 } from 'react-icons/bs'
-import PrivateRoute from '../(dashboard)/PrivateRoute'
 import Image from 'next/image'
 import useUserState from '@/hooks/useUserState'
+import AdminPrivateRoute from './AdminPrivateRoute'
 
 export default function AdminSectionLayout({ children }: { children: React.ReactNode }) {
    const { userDataState } = useUserState()
    const photo = (userDataState.photoURL as string) ?? '/standard-avatar.png'
 
    return (
-      <PrivateRoute>
+      <AdminPrivateRoute>
          <header className='fixed bg-slate-950 flex flex-col gap-8 h-screen w-60 z-[1]'>
             <div className='bg-[rgb(8,14,32)] flex flex-row items-center justify-start pl-4 border-transparent border-b shadow-lg h-16'>
                <Logo />
@@ -73,6 +73,6 @@ export default function AdminSectionLayout({ children }: { children: React.React
                </div>
             </div>
          </div>
-      </PrivateRoute>
+      </AdminPrivateRoute>
    )
 }
