@@ -10,13 +10,12 @@ export default function useCoursesState() {
 
    const categoriesState = useSelector(getCategoriesState)
    const setCategoriesState = async function (id?: string) {
-      let data: any
       const setCategories = (categories: CategoryModel[]) => {
          dispatch(rescueCategoriesState(categories))
       }
       if (id) {
-         data = await CategoryModel.find(id)
-         setCategories(data)
+         const data = await CategoryModel.find(id)
+         data && setCategories([data])
       } else {
          const categoriesRef = collection(db, CategoryModel.PATH)
          const mainQuery = query(categoriesRef, orderBy('name'))

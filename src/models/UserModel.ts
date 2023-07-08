@@ -10,7 +10,9 @@ export default class UserModel implements User {
       this.user = this.createFullerUserModel(user)
    }
 
-   public static get PATH() { return 'user' }
+   public static get PATH() {
+      return 'user'
+   }
 
    public static async find(id: string) {
       const docRef = await getDoc(doc(db, this.PATH, id))
@@ -20,9 +22,9 @@ export default class UserModel implements User {
    }
 
    public static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
-      const unsubscribe = onSnapshot(q, snapshot => {
+      const unsubscribe = onSnapshot(q, (snapshot) => {
          const users: UserModel[] = []
-         snapshot.forEach(document => {
+         snapshot.forEach((document) => {
             const user = document.data()
             if (user.dateOfBirth) {
                user.dateOfBirth = user.dateOfBirth.toDate()
@@ -42,7 +44,7 @@ export default class UserModel implements User {
    public get active()              { return this.user.active }
    public get photoURL()            { return this.user.photoURL }
    public get signUpDate()          { return this.user.signUpDate }
-   public get userRole()            { return this.user.userRoleIds }
+   public get userRoleIds()         { return this.user.userRoleIds }
    public get courseIds()           { return this.user.courseIds }
    public get lessonCompletionIds() { return this.user.lessonCompletionIds }
 
@@ -64,10 +66,16 @@ export default class UserModel implements User {
    }
 
    private createFullerUserModel(user: User) {
-      if (user.signUpDate instanceof Date)
-         return {
+      let obj = user
+      if (!(user.signUpDate instanceof Date))
+         obj = {
             ...user,
-            userRole: [USER_ROLE_ID],
+            signUpDate: new Date(),
+         }
+      if (user.userRoleIds?.length === 0)
+         obj = {
+            ...obj,
+            userRoleIds: [USER_ROLE_ID],
          }
       const { signUpDate, ...rest } = { ...user }
       const timestamp = signUpDate
@@ -75,7 +83,6 @@ export default class UserModel implements User {
       return {
          ...rest,
          signUpDate: timestamp instanceof Date ? timestamp : new Date(),
-         userRole: [USER_ROLE_ID],
       }
    }
 }

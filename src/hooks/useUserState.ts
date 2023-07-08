@@ -34,7 +34,7 @@ export default function useUserState() {
    }, [])
 
    useEffect(() => {
-      setUserDataState(userState)
+      !userDataState.active && setUserDataState(userState)
    }, [userState])
 
    return { userDataState, userState, setUserState }

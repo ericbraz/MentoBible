@@ -74,9 +74,11 @@ export interface LessonsCompletion {
 
 export interface Role {
    id: string
-   name: 'user' | 'moderator' | 'administrator' | 'master'
+   name: RoleNames
    idSystem: string[]
 }
+
+export type RoleNames = 'user' | 'moderator' | 'administrator' | 'master'
 
 export interface System {
    id: string
