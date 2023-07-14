@@ -10,7 +10,7 @@ import { Category, Course } from '@/models/interfaces'
 import CourseService from '@/service/CourseService'
 import { useState } from 'react'
 
-export default function AdminCourseCategoryCreation() {
+export default function AdminCourseEditionPage() {
    const { userDataState } = useUserState()
    const { categoriesState } = useCoursesState()
    const selectObj = categoriesState?.map((category) => ({
@@ -20,7 +20,7 @@ export default function AdminCourseCategoryCreation() {
 
    const courseManagement = new CourseService()
 
-   const [createCourse, setCreateCourse] = useState<Omit<Course, 'id' | 'userCreatorId'>>({
+   const cleanCourseObject: Omit<Course, 'id' | 'userCreatorId'> = {
       categoryId: '',
       name: '',
       isActive: 'creation',
@@ -28,13 +28,15 @@ export default function AdminCourseCategoryCreation() {
       description: '',
       thumbnailURL: '',
       coverURL: '',
-   })
+   }
+   const [createCourse, setCreateCourse] = useState(cleanCourseObject)
 
-   const [createCategory, setCreateCategory] = useState<Omit<Category, 'id' | 'userCreatorId'>>({
+   const cleanCategoryObject: Omit<Category, 'id' | 'userCreatorId'> = {
       name: '',
       thumbnailURL: '',
       coverURL: '',
-   })
+   }
+   const [createCategory, setCreateCategory] = useState(cleanCategoryObject)
 
    return (
       <>
@@ -45,19 +47,7 @@ export default function AdminCourseCategoryCreation() {
                   ...createCourse,
                   userCreatorId: userDataState.id,
                })
-               setTimeout(
-                  () =>
-                     setCreateCourse({
-                        categoryId: '',
-                        name: '',
-                        isActive: 'creation',
-                        isModular: false,
-                        description: '',
-                        thumbnailURL: '',
-                        coverURL: '',
-                     }),
-                  5000
-               )
+               setTimeout(() => setCreateCourse(cleanCourseObject), 5000)
             }}
             success='Parabéns! Curso cadastrado com sucesso.<br />Verifique se não há módulos ou aulas pendentes a serem cadastradas na aba de edição de cursos.'
          >
@@ -141,10 +131,6 @@ export default function AdminCourseCategoryCreation() {
                Thumbnail
             </AdminSectionInputField>
 
-            <AdminFormDivider>Dados dos módulos</AdminFormDivider>
-
-            <AdminFormDivider>Dados das aulas</AdminFormDivider>
-
             <AdminSectionInputSubmit value='Criar novo curso' />
          </AdminSectionFormDivider>
 
@@ -155,15 +141,7 @@ export default function AdminCourseCategoryCreation() {
                   ...createCategory,
                   userCreatorId: userDataState.id,
                })
-               setTimeout(
-                  () =>
-                     setCreateCategory({
-                        name: '',
-                        thumbnailURL: '',
-                        coverURL: '',
-                     }),
-                  5000
-               )
+               setTimeout(() => setCreateCategory(cleanCategoryObject), 5000)
             }}
             success='Parabéns! Categoria cadastrada com sucesso.'
          >

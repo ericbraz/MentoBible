@@ -41,9 +41,11 @@ export default function AdminSectionLayout({ children }: { children: React.React
                   href='/admin/course-management'
                   sublinks={[
                      { title: 'Categorias', url: '/admin/course-management/categories' },
-                     { title: 'Criar curso', url: '/admin/course-management/creation' },
-                     { title: 'Editar curso', url: '/admin/course-management/edit' },
-                     { title: 'Excluir ou inativar curso', url: '/admin/course-management/inact' },
+                     { title: 'Lista de cursos', url: '/admin/course-management/course-list' },
+                     { title: 'Edição de curso', url: '/admin/course-management/course-edition' },
+                     { title: 'Edição de módulos', url: '/admin/course-management/chapter-edition' },
+                     { title: 'Edição de aulas', url: '/admin/course-management/lesson-edition' },
+                     { title: 'Excluir ou inativar curso', url: '/admin/course-management/course-deletion' },
                   ]}
                >
                   <BsFillBookFill size={21} />

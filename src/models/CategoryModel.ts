@@ -7,7 +7,10 @@ export default class CategoryModel implements Category {
    private category: Category
 
    constructor(category: Omit<Category, 'id'>) {
-      this.category = this.createFullerCategoryModel({ id: generateID(), ...category })
+      const filteredCategory = Object.fromEntries(
+         Object.entries(category).filter(([_, value]) => value !== undefined)
+      ) as Omit<Category, 'id'>
+      this.category = this.createFullerCategoryModel({ id: generateID(), ...filteredCategory })
    }
 
    public static get PATH() {

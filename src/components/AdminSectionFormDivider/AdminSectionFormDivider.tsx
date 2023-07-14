@@ -1,4 +1,5 @@
 import useToastState from '@/hooks/useToastState'
+import { standardErrorMessage } from '@/utils/authUserHelper'
 
 export default function AdminSectionFormDivider({
    title,
@@ -31,15 +32,8 @@ export default function AdminSectionFormDivider({
                         12000
                      )
                } catch (error) {
-                  setToastState(
-                     {
-                        title: 'Opa!',
-                        description:
-                           `Tire o print desta tela com essa mensagem de erro e envie para o seu desenvolvedor:<br />${error}` as string,
-                        type: 'error',
-                     },
-                     35000
-                  )
+                  console.log(error)
+                  setToastState(standardErrorMessage(error), 65000)
                }
             }}
             className='grid grid-cols-6 gap-5 gap-y-10'
