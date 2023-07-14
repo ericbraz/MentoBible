@@ -47,3 +47,12 @@ export function systemStateData(systems?: System[] | null | undefined) {
 
    return systems
 }
+
+export function standardErrorMessage(error: unknown) {
+   return {
+      title: 'Opa!',
+      description:
+         `Tire o print desta tela com essa mensagem de erro e envie para o seu desenvolvedor:<br />${error}` as string,
+      type: 'error' as 'error',
+   }
+}

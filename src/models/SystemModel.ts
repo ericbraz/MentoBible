@@ -8,7 +8,10 @@ export default class SystemModel implements System {
    private system: System
 
    constructor(system: Omit<System, 'id'>) {
-      this.system = { id: generateID(), ...system }
+      const filteredSystem = Object.fromEntries(
+         Object.entries(system).filter(([_, value]) => value !== undefined)
+      ) as Omit<System, 'id'>
+      this.system = { id: generateID(), ...filteredSystem }
    }
 
    public static get PATH() {

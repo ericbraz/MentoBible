@@ -7,7 +7,10 @@ export default class UserModel implements User {
    private user: User
 
    constructor(user: User) {
-      this.user = this.createFullerUserModel(user)
+      const filteredUser = Object.fromEntries(
+         Object.entries(user).filter(([_, value]) => value !== undefined)
+      ) as User
+      this.user = this.createFullerUserModel(filteredUser)
    }
 
    public static get PATH() {

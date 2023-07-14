@@ -7,9 +7,11 @@ interface AdminSectionInputFieldProps {
    onChange: (
       event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
    ) => void
+   onBlurSelect?: (event: React.ChangeEvent<HTMLSelectElement>) => void
    id?: string
    placeholder?: string
    name?: string
+   pattern?: string
    accept?: string
    required?: boolean
    formality?: boolean
@@ -25,9 +27,11 @@ export default function AdminSectionInputField(props: AdminSectionInputFieldProp
       type,
       value,
       onChange,
+      onBlurSelect,
       id,
       placeholder,
       name,
+      pattern,
       accept,
       required,
       formality,
@@ -50,7 +54,9 @@ export default function AdminSectionInputField(props: AdminSectionInputFieldProp
             name={name}
             accept={accept}
             onChange={onChange}
+            onBlurSelect={onBlurSelect}
             className={`col-span-5`}
+            pattern={pattern}
             required={required}
             formality={formality}
             select={select}

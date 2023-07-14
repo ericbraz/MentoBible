@@ -11,7 +11,9 @@ interface InputFieldProps {
    onChange: (
       event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
    ) => void
+   onBlurSelect?: (event: React.ChangeEvent<HTMLSelectElement>) => void
    className?: string
+   pattern?: string
    required?: boolean
    formality?: boolean
    children?: React.ReactNode
@@ -31,7 +33,9 @@ export default function InputField(props: InputFieldProps) {
       name,
       accept,
       onChange,
+      onBlurSelect,
       className,
+      pattern,
       required,
       formality,
       children,
@@ -66,9 +70,9 @@ export default function InputField(props: InputFieldProps) {
                   id={id ? id : generateID()}
                   placeholder={placeholder}
                   name={name}
-                  value={value}
                   accept={accept}
                   onChange={onChange}
+                  pattern={pattern}
                   required={required}
                />
             </>
@@ -80,6 +84,7 @@ export default function InputField(props: InputFieldProps) {
                placeholder={placeholder}
                name={name}
                required={required}
+               onBlur={onBlurSelect}
             >
                <option value=''></option>
                {select?.map((options) => (
