@@ -7,7 +7,10 @@ export default class CourseModel implements Course {
    private course: Course
 
    constructor(course: Omit<Course, 'id' | 'isActive'>) {
-      this.course = this.createFullerCategoryModel({ id: generateID(), ...course })
+      const filteredCourse = Object.fromEntries(
+         Object.entries(course).filter(([_, value]) => value !== undefined)
+      ) as Omit<Course, 'id' | 'isActive'>
+      this.course = this.createFullerCourseModel({ id: generateID(), ...filteredCourse })
    }
 
    public static get PATH() {
@@ -63,7 +66,7 @@ export default class CourseModel implements Course {
       return await deleteDoc(docRef)
    }
 
-   private createFullerCategoryModel(course: Omit<Course, 'isActive'>) {
+   private createFullerCourseModel(course: Omit<Course, 'isActive'>) {
       if (course.creationDate instanceof Date)
          return { ...course, isActive: 'creation' as CourseCreationType }
 

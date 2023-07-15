@@ -9,7 +9,10 @@ export default class RoleModel implements Role {
    private roleNames = ['user', 'moderator', 'administrator', 'master'] as RoleNames[]
 
    constructor(role: Omit<Role, 'id' | 'idSystem'>) {
-      this.role = this.createFullerCategoryModel({ id: generateID(), ...role })
+      const filteredRole = Object.fromEntries(
+         Object.entries(role).filter(([_, value]) => value !== undefined)
+      ) as Omit<Role, 'id' | 'idSystem'>
+      this.role = this.createFullerCategoryModel({ id: generateID(), ...filteredRole })
    }
 
    public static get PATH() {
