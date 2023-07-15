@@ -9,6 +9,7 @@ import { Chapter } from '@/models/interfaces'
 import CourseService from '@/service/CourseService'
 import useCoursesState from '@/hooks/useCoursesState'
 import useUserState from '@/hooks/useUserState'
+import useToastState from '@/hooks/useToastState'
 
 export default function ChapterCreationComponent() {
    const courseManagement = new CourseService()
@@ -49,16 +50,24 @@ export default function ChapterCreationComponent() {
            })
    }, [chaptersState])
 
+   const { setToastState, turnToastOff } = useToastState()
+
    return (
       <AdminSectionFormDivider
          title='Criar módulo'
          onSubmitFunction={async () => {
+            setToastState({
+               title: '',
+               description: '',
+               type: 'loader',
+            })
             await courseManagement.saveChapter({
                ...createChapter,
                courseId,
                userCreatorId: userDataState.id,
             })
             setCreateChapter(cleanChapterObject)
+            turnToastOff()
          }}
          success='Parabéns! Curso cadastrado com sucesso.<br />Verifique se não há módulos ou aulas pendentes a serem cadastradas na aba de edição de cursos.'
       >

@@ -5,6 +5,7 @@ import AdminSectionInputSubmit from '@/components/AdminSectionFormDivider/AdminS
 import TextEditor from '@/components/TextEditor'
 import AdminFormDivider from '@/components/book/verse/AdminFormDivider'
 import useCoursesState from '@/hooks/useCoursesState'
+import useToastState from '@/hooks/useToastState'
 import useUserState from '@/hooks/useUserState'
 import { Category, Course } from '@/models/interfaces'
 import CourseService from '@/service/CourseService'
@@ -38,16 +39,24 @@ export default function AdminCourseEditionPage() {
    }
    const [createCategory, setCreateCategory] = useState(cleanCategoryObject)
 
+   const { setToastState, turnToastOff } = useToastState()
+
    return (
       <>
          <AdminSectionFormDivider
             title='Criar curso'
             onSubmitFunction={async () => {
+               setToastState({
+                  title: '',
+                  description: '',
+                  type: 'loader',
+               })
                await courseManagement.saveCourse({
                   ...createCourse,
                   userCreatorId: userDataState.id,
                })
-               setTimeout(() => setCreateCourse(cleanCourseObject), 5000)
+               setCreateCourse(cleanCourseObject)
+               turnToastOff()
             }}
             success='Parabéns! Curso cadastrado com sucesso.<br />Verifique se não há módulos ou aulas pendentes a serem cadastradas na aba de edição de cursos.'
          >
@@ -137,11 +146,17 @@ export default function AdminCourseEditionPage() {
          <AdminSectionFormDivider
             title='Criar categoria'
             onSubmitFunction={async () => {
+               setToastState({
+                  title: '',
+                  description: '',
+                  type: 'loader',
+               })
                await courseManagement.saveCategory({
                   ...createCategory,
                   userCreatorId: userDataState.id,
                })
-               setTimeout(() => setCreateCategory(cleanCategoryObject), 5000)
+               setCreateCategory(cleanCategoryObject)
+               turnToastOff()
             }}
             success='Parabéns! Categoria cadastrada com sucesso.'
          >

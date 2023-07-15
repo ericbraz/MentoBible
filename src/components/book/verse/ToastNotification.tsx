@@ -21,7 +21,7 @@ export default function ToastNotification() {
    return (
       <div
          className={`${
-            visibility ? 'flex items-center justify-center' : 'hidden'
+            visibility && type !== 'loader' ? 'flex items-center justify-center' : 'hidden'
          } fixed right-0 bottom-28 left-0 max-h-fit z-[1000]`}
          onClick={turnToastOff}
       >

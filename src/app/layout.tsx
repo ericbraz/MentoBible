@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import ReduxProvider from './ReduxProvider'
 import ToastNotification from '@/components/book/verse/ToastNotification'
+import LoaderComponent from '@/components/book/verse/LoaderComponent'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                <div className='grid overflow-hidden min-h-screen h-full'>{children}</div>
 
                <ToastNotification />
+               <LoaderComponent />
             </ReduxProvider>
          </body>
       </html>

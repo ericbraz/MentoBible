@@ -10,6 +10,7 @@ import CourseService from '@/service/CourseService'
 import useUserState from '@/hooks/useUserState'
 import useCoursesState from '@/hooks/useCoursesState'
 import { storeFiles } from '@/utils/modelHelper'
+import useToastState from '@/hooks/useToastState'
 
 interface SelectObject {
    value: string
@@ -101,10 +102,17 @@ export default function LessonCreationComponent() {
       setCreateLesson({ ...createLesson, lessonSequence: lessonSequence ?? ERROR_LESSON_SEQUENCE })
    }, [lessonsState])
 
+   const { setToastState, turnToastOff } = useToastState()
+
    return (
       <AdminSectionFormDivider
          title='Criar aula'
          onSubmitFunction={async () => {
+            setToastState({
+               title: '',
+               description: '',
+               type: 'loader',
+            })
             if (createLesson.lessonSequence === ERROR_LESSON_SEQUENCE)
                throw Error('It was not possible to set lessonSequence property')
             await courseManagement.saveLesson({
@@ -117,6 +125,7 @@ export default function LessonCreationComponent() {
                complementaryMaterialURL: await storeFiles(tempImagesURL.material, 'material'),
             })
             setCreateLesson(cleanLessonObject)
+            turnToastOff()
          }}
          success='Parabéns! Curso cadastrado com sucesso.<br />Verifique se não há módulos ou aulas pendentes a serem cadastradas na aba de edição de cursos.'
       >

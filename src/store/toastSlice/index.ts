@@ -4,7 +4,7 @@ import { RootState } from '..'
 export interface ReduxToastState {
    title: string
    description: string
-   type: 'success' | 'info' | 'error'
+   type: 'success' | 'info' | 'error' | 'loader'
    visibility: boolean
 }
 const initialState: ReduxToastState = {
