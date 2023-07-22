@@ -1,10 +1,22 @@
-import { Query, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore'
+import {
+   Query,
+   Unsubscribe,
+   deleteDoc,
+   doc,
+   getDoc,
+   onSnapshot,
+   setDoc,
+   updateDoc,
+} from 'firebase/firestore'
+import { ref, deleteObject } from 'firebase/storage'
 import { User } from './interfaces'
-import { db } from '@/config/firebase'
+import { db, storage } from '@/config/firebase'
 import { USER_ROLE_ID } from '@/constants/firebase'
+import { filterUndefinedInObjectsToExclusion, userNameFormatter } from '@/utils/modelHelper'
 
 export default class UserModel implements User {
    private user: User
+   private previousImage: string | undefined
 
    constructor(user: User) {
       const filteredUser = Object.fromEntries(
@@ -45,6 +57,8 @@ export default class UserModel implements User {
    public get lastName()            { return this.user.lastName }
    public get email()               { return this.user.email }
    public get active()              { return this.user.active }
+   public get userName()            { return this.user.userName }
+   public get bioDescription()      { return this.user.bioDescription }
    public get photoURL()            { return this.user.photoURL }
    public get signUpDate()          { return this.user.signUpDate }
    public get userRoleIds()         { return this.user.userRoleIds }
@@ -52,7 +66,7 @@ export default class UserModel implements User {
    public get lessonCompletionIds() { return this.user.lessonCompletionIds }
 
    private isValid() {
-      if (!this.id && !this.firstName && !this.lastName && !this.email) return false
+      if (!this.id && !this.firstName && !this.lastName && !this.email && !this.active) return false
 
       return true
    }
@@ -63,29 +77,42 @@ export default class UserModel implements User {
       await setDoc(docRef, this.user)
    }
 
+   public async update() {
+      if (!this.isValid()) throw new Error('Object initialization one or more attributes')
+      const docRef = doc(db, UserModel.PATH, this.id)
+
+      UserModel.find(this.id)
+         ?.then(async (userData) => {
+            this.previousImage = userData?.photoURL
+            console.log(this.previousImage)
+            const imageRef = !!this.previousImage && ref(storage, this.previousImage)
+            !!imageRef && (await deleteObject(imageRef))
+         })
+         .then(async () => {
+            const userDataToUpdate = filterUndefinedInObjectsToExclusion({
+               userName: this.userName,
+               bioDescription: this.bioDescription,
+               photoURL: this.photoURL,
+            })
+            await updateDoc(docRef, userDataToUpdate)
+         })
+   }
+
    public async delete() {
       const docRef = doc(db, UserModel.PATH, this.id)
       return await deleteDoc(docRef)
    }
 
    private createFullerUserModel(user: User) {
-      let obj = user
-      if (!(user.signUpDate instanceof Date))
-         obj = {
-            ...user,
-            signUpDate: new Date(),
-         }
-      if (user.userRoleIds?.length === 0)
-         obj = {
-            ...obj,
-            userRoleIds: [USER_ROLE_ID],
-         }
-      const { signUpDate, ...rest } = { ...user }
+      const { firstName, lastName, signUpDate, userRoleIds, userName } = { ...user }
       const timestamp = signUpDate
-
-      return {
-         ...rest,
+      const obj = {
+         ...user,
+         userName: userName ?? userNameFormatter(firstName, lastName),
+         userRoleIds: !!userRoleIds && userRoleIds.length > 0 ? userRoleIds : [USER_ROLE_ID],
          signUpDate: timestamp instanceof Date ? timestamp : new Date(),
       }
+
+      return obj
    }
 }

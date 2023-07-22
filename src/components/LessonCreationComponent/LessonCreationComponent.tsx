@@ -153,9 +153,9 @@ export default function LessonCreationComponent() {
                )
             }}
             id='choose-chapter'
-            placeholder='Escolha a categoria'
+            placeholder='Escolha o módulo'
             select={chapterObj}
-            required
+            required={!!coursesState?.find((course) => course.id === selectedCourseId)?.isModular}
             formality
          >
             Selecionar módulo
@@ -191,7 +191,6 @@ export default function LessonCreationComponent() {
             onChange={(event) => setCreateLesson({ ...createLesson, videoURL: event.target.value })}
             id='videoURL'
             placeholder='URL'
-            //pattern='^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|vimeo\.com\/)([a-zA-Z0-9_-]{11})$'
             required
             formality
          >

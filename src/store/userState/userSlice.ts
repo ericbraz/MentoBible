@@ -34,9 +34,11 @@ export const userSlice = createSlice({
          state.data.lastName = payload.lastName
          state.data.email = payload.email
          state.data.active = payload.active
+         state.data.userName = payload.userName
+         state.data.bioDescription = payload.bioDescription
          state.data.userRoleIds = payload.userRoleIds
          state.data.photoURL = payload.photoURL as string
-         //state.data.signUpDate = payload.signUpDate
+         state.data.signUpDate = payload.signUpDate
          state.data.courseIds = payload.courseIds
          state.data.lessonCompletionIds = payload.lessonCompletionIds
       },
