@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from 'react'
 export default function PersonalProfilePage() {
    const { setToastState } = useToastState()
 
-   const { userDataState, setUserDataStateById } = useUserState()
+   const { userDataState, updateUserDataState, setUserDataStateById } = useUserState()
 
    const [userLocalDataState, setUserLocalDataState] = useState<User>(EMPTY_USER_OBJECT)
 
@@ -108,12 +108,16 @@ export default function PersonalProfilePage() {
                />
             ) : (
                <div
-                  className='col-span-1 text-left cursor-pointer w-fit min-h-[45px]'
+                  className='col-span-1 text-left min-h-[45px]'
                   onClick={() => setOpenUserName(true)}
                >
-                  {!!userName
-                     ? userName
-                     : userDataState.userName ?? <i className='text-zinc-500'>Nome de usuário</i>}
+                  <span className='cursor-pointer w-fit h-fit'>
+                     {!!userName
+                        ? userName
+                        : userDataState.userName ?? (
+                             <i className='text-zinc-500'>Nome de usuário</i>
+                          )}
+                  </span>
                </div>
             )}
             <div className='col-span-1 text-right'>Bio:</div>
@@ -129,14 +133,16 @@ export default function PersonalProfilePage() {
                />
             ) : (
                <div
-                  className='col-span-1 text-left cursor-pointer w-fit min-h-[220px]'
+                  className='col-span-1 text-left min-h-[220px]'
                   onClick={() => setOpenBioDescription(true)}
                >
-                  {!!bioDescription ? (
-                     bioDescription
-                  ) : (
-                     <i className='text-zinc-500'>Descrição da Bio</i>
-                  )}
+                  <span className='cursor-pointer w-fit h-fit'>
+                     {!!bioDescription ? (
+                        bioDescription
+                     ) : (
+                        <i className='text-zinc-500'>Descrição da Bio</i>
+                     )}
+                  </span>
                </div>
             )}
             <div className='flex justify-center col-span-1'>
@@ -154,16 +160,14 @@ export default function PersonalProfilePage() {
                </button>
             </div>
             <div className='flex justify-center col-span-1'>
-               <button
-                  className='bg-zinc-200 hover:bg-zinc-600 hover:text-white rounded-xl px-8 py-3 w-full'
+               <div
+                  className='bg-zinc-200 hover:bg-zinc-600 hover:text-white text-center cursor-pointer rounded-xl px-8 py-3 w-full'
                   onClick={() => {
-                     setPhotoURLString(userDataState.photoURL ?? DEFAULT_PROFILE_IMAGE)
-                     setUserName(userDataState.userName)
-                     setBioDescription(userDataState.bioDescription)
+                     updateUserDataState()
                   }}
                >
                   Limpar
-               </button>
+               </div>
             </div>
          </form>
       </>

@@ -28,14 +28,16 @@ export default function AvatarProfilePicture({
          onMouseOver={() => setVisibility(uploader ?? false)}
          onMouseLeave={() => setVisibility(false)}
       >
-         <div className='w-80 h-80'>
+         <div className='relative w-80 h-80'>
             <Image
                src={picValue ?? DEFAULT_PROFILE_IMAGE}
                alt='User Avatar'
+               sizes='320'
                fill
                className={`object-cover rounded-full ${uploader ? ' cursor-pointer' : ''} ${
                   className ?? ''
                }`}
+               priority
             />
          </div>
          <div

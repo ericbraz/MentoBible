@@ -26,6 +26,9 @@ export default function useUserState() {
    const setUserDataStateById = async function (id: string) {
       updateUserById(id)
    }
+   const updateUserDataState = async function () {
+      setUserDataState(userState)
+   }
 
    useEffect(() => {
       const unsubscribe = AuthService.authStateListener(setUserState)
@@ -44,5 +47,5 @@ export default function useUserState() {
       }
    }
 
-   return { userState, setUserState, userDataState, setUserDataStateById }
+   return { userState, setUserState, userDataState, updateUserDataState, setUserDataStateById }
 }
