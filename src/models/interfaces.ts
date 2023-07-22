@@ -58,6 +58,8 @@ export interface User {
    lastName: string
    email: string
    active: boolean
+   userName?: string
+   bioDescription?: string
    userRoleIds?: string[]
    photoURL?: string
    signUpDate?: Date

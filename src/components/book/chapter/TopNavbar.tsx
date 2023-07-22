@@ -115,12 +115,14 @@ export default function TopNavbar() {
                   >
                      <BsListCheck /> Lista de aulas
                   </div>
-                  <div
-                     className='flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black'
-                     onClick={() => setToastState(TOAST_MESSAGE)}
+                  <Link
+                     href='/dashboard/personal-profile'
+                     className={`flex flex-row gap-2 px-4 py-3 cursor-pointer hover:bg-black ${
+                        !isUserAuthorized ? 'mb-[0.4rem]' : ''
+                     }`}
                   >
                      <BsFillPersonVcardFill /> Perfil
-                  </div>
+                  </Link>
                   {isUserAuthorized && (
                      <Link
                         href='/admin/home'

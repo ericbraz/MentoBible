@@ -1,5 +1,6 @@
 'use client'
 import { generateID } from '@/utils/modelHelper'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 interface InputFieldProps {
    type: React.HTMLInputTypeAttribute
@@ -11,7 +12,9 @@ interface InputFieldProps {
    onChange: (
       event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
    ) => void
-   onBlurSelect?: (event: React.ChangeEvent<HTMLSelectElement>) => void
+   onBlurSelect?: (
+      event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+   ) => void
    className?: string
    pattern?: string
    required?: boolean
@@ -24,7 +27,11 @@ interface InputFieldProps {
    }[]
 }
 
-export default function InputField(props: InputFieldProps) {
+interface InputRef {
+   focus: () => void
+}
+
+const InputField = forwardRef<InputRef, InputFieldProps>((props, ref) => {
    const {
       type,
       value,
@@ -45,9 +52,16 @@ export default function InputField(props: InputFieldProps) {
 
    const isAdmin = type !== 'file' ? adminInputField : false
 
+   const inputRef = useRef<HTMLInputElement | null>(null)
+   useImperativeHandle(ref, () => ({
+      focus: () => {
+         inputRef.current?.focus()
+      },
+   }))
+
    return (
       <div
-         className={`input-field flex flex-col text-black ${className ? className : ''} ${
+         className={`input-field flex flex-col text-black ${className ?? ''} ${
             isAdmin ? 'items-center justify-center' : ''
          }`}
       >
@@ -67,13 +81,16 @@ export default function InputField(props: InputFieldProps) {
                      type !== 'file' ? 'bg-[rgba(255,255,255,0.6)]' : ''
                   } placeholder-slate-500`}
                   type={type}
-                  id={id ? id : generateID()}
+                  id={id ?? generateID()}
                   placeholder={placeholder}
                   name={name}
+                  value={value}
                   accept={accept}
                   onChange={onChange}
+                  onBlur={onBlurSelect}
                   pattern={pattern}
                   required={required}
+                  ref={inputRef as React.Ref<HTMLInputElement>}
                />
             </>
          ) : (
@@ -85,6 +102,7 @@ export default function InputField(props: InputFieldProps) {
                name={name}
                required={required}
                onBlur={onBlurSelect}
+               ref={inputRef as React.Ref<HTMLSelectElement>}
             >
                <option value=''></option>
                {select?.map((options) => (
@@ -96,8 +114,10 @@ export default function InputField(props: InputFieldProps) {
          )}
 
          <i className='relative top-[-31px] left-4 w-fit'>
-            {children ? children : <div className='h-4'></div>}
+            {children ?? <div className='h-4'></div>}
          </i>
       </div>
    )
-}
+})
+
+export default InputField

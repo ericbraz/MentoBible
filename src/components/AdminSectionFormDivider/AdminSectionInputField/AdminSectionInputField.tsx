@@ -7,7 +7,9 @@ interface AdminSectionInputFieldProps {
    onChange: (
       event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
    ) => void
-   onBlurSelect?: (event: React.ChangeEvent<HTMLSelectElement>) => void
+   onBlurSelect?: (
+      event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+   ) => void
    id?: string
    placeholder?: string
    name?: string

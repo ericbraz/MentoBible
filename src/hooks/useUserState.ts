@@ -21,10 +21,10 @@ export default function useUserState() {
    const userDataState = useSelector(getUserData)
    const setUserDataState = async function (currentUserState: FormattedUserState) {
       const id = currentUserState.userId
-      if (id) {
-         const newUserState = await AuthService.getUserData(id)
-         newUserState && dispatch(attributeUserData(newUserState))
-      }
+      updateUserById(id)
+   }
+   const setUserDataStateById = async function (id: string) {
+      updateUserById(id)
    }
 
    useEffect(() => {
@@ -37,5 +37,12 @@ export default function useUserState() {
       !userDataState.active && setUserDataState(userState)
    }, [userState])
 
-   return { userDataState, userState, setUserState }
+   async function updateUserById(id?: string | null) {
+      if (id) {
+         const newUserState = await AuthService.getUserData(id)
+         newUserState && dispatch(attributeUserData(newUserState))
+      }
+   }
+
+   return { userState, setUserState, userDataState, setUserDataStateById }
 }

@@ -13,10 +13,11 @@ import {
 import Image from 'next/image'
 import useUserState from '@/hooks/useUserState'
 import AdminPrivateRoute from './AdminPrivateRoute'
+import { DEFAULT_PROFILE_IMAGE } from '@/constants/firebase'
 
 export default function AdminSectionLayout({ children }: { children: React.ReactNode }) {
    const { userDataState } = useUserState()
-   const photo = (userDataState.photoURL as string) ?? '/standard-avatar.png'
+   const photo = userDataState.photoURL ?? DEFAULT_PROFILE_IMAGE
 
    return (
       <AdminPrivateRoute>
