@@ -51,7 +51,7 @@ interface FoldersObject {
    path: string
 }
 
-export async function storeFiles(image: File | null, folder?: FoldersTypes) {
+export async function storeFiles(image: File | null | undefined, folder?: FoldersTypes) {
    if (!image) return undefined
 
    const fbFolder: FoldersObject[] = [

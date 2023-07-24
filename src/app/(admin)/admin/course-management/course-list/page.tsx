@@ -27,14 +27,19 @@ export default function AdminCourseListPage() {
                      ?.filter((course) => course.categoryId === category.id)
                      ?.map((course) => (
                         <div key={course.id}>
-                           <div>{course.name}</div>
+                           <div>
+                              {course.name} ({course.isModular ? 'Modular' : 'Não Modular'})
+                           </div>
                            <div className='ml-8 text-white bg-red-950 w-fit'>
                               {course.isModular
                                  ? chaptersState
                                       ?.filter((chapter) => chapter.courseId === course.id)
                                       ?.map((chapter) => (
                                          <div key={chapter.id} className='px-2'>
-                                            <div>Módulo: {chapter.name}</div>
+                                            <div>
+                                               Módulo: {chapter.name} ({chapter.chapterSequence + 1}
+                                               )
+                                            </div>
                                             <div>
                                                {lessonsState
                                                   ?.filter(
@@ -45,7 +50,8 @@ export default function AdminCourseListPage() {
                                                         key={lesson.id}
                                                         className='ml-8 px-2 bg-yellow-400 text-black'
                                                      >
-                                                        Aula: {lesson.name}
+                                                        Aula: {lesson.name} (
+                                                        {lesson.lessonSequence + 1})
                                                      </div>
                                                   ))}
                                             </div>
@@ -55,7 +61,7 @@ export default function AdminCourseListPage() {
                                       ?.filter((lesson) => lesson.courseId === course.id)
                                       ?.map((lesson) => (
                                          <div key={lesson.id} className='px-2'>
-                                            Aula: {lesson.name}
+                                            Aula: {lesson.name} ({lesson.lessonSequence + 1})
                                          </div>
                                       ))}
                            </div>
