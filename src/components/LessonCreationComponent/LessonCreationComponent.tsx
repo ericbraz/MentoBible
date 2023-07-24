@@ -92,13 +92,17 @@ export default function LessonCreationComponent() {
          if (isCourseModular === 'chapterId' && !!selectedChapterId) {
             setLessonsState(selectedChapterId, isCourseModular)
          } else if (isCourseModular === 'courseId') {
-            setLessonsState(selectedChapterId, isCourseModular)
+            setLessonsState(selectedCourseId, isCourseModular)
          }
       }
    }, [selectedCourseId, selectedChapterId])
 
    useEffect(() => {
-      const lessonSequence = lessonsState?.length
+      const lessonSequence = !!lessonsState
+         ? lessonsState.reduce((maxLessonSeq, lesson) => {
+              return Math.max(maxLessonSeq, lesson.lessonSequence) + 1
+           }, 0)
+         : 0
       setCreateLesson({ ...createLesson, lessonSequence: lessonSequence ?? ERROR_LESSON_SEQUENCE })
    }, [lessonsState])
 

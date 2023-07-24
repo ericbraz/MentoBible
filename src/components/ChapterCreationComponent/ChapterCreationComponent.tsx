@@ -10,6 +10,7 @@ import CourseService from '@/service/CourseService'
 import useCoursesState from '@/hooks/useCoursesState'
 import useUserState from '@/hooks/useUserState'
 import useToastState from '@/hooks/useToastState'
+import { storeFiles } from '@/utils/modelHelper'
 
 export default function ChapterCreationComponent() {
    const courseManagement = new CourseService()
@@ -22,6 +23,8 @@ export default function ChapterCreationComponent() {
       coverURL: undefined,
    }
    const [createChapter, setCreateChapter] = useState(cleanChapterObject)
+   const [thumbnail, setThumbnail] = useState<File | null>()
+   const [cover, setCover] = useState<File | null>()
 
    const { userDataState } = useUserState()
    const { coursesState, chaptersState, setChaptersState } = useCoursesState()
@@ -39,15 +42,15 @@ export default function ChapterCreationComponent() {
       setChaptersState(selectedCourse, 'courseId')
    }, [selectedCourse, createChapter.name])
    useEffect(() => {
-      !!chaptersState?.length
-         ? setCreateChapter({
-              ...createChapter,
-              chapterSequence: chaptersState.length,
-           })
-         : setCreateChapter({
-              ...createChapter,
-              chapterSequence: 0,
-           })
+      const chapterSequence = !!chaptersState
+         ? chaptersState.reduce((maxLessonSeq, lesson) => {
+              return Math.max(maxLessonSeq, lesson.chapterSequence) + 1
+           }, 0)
+         : 0
+      setCreateChapter({
+         ...createChapter,
+         chapterSequence: chapterSequence,
+      })
    }, [chaptersState])
 
    const { setToastState, turnToastOff } = useToastState()
@@ -61,10 +64,14 @@ export default function ChapterCreationComponent() {
                description: '',
                type: 'loader',
             })
+            const thumbnailURL = await storeFiles(thumbnail, 'cover')
+            const coverURL = await storeFiles(cover, 'cover')
             await courseManagement.saveChapter({
                ...createChapter,
                courseId,
                userCreatorId: userDataState.id,
+               thumbnailURL,
+               coverURL,
             })
             setCreateChapter(cleanChapterObject)
             turnToastOff()
@@ -113,9 +120,13 @@ export default function ChapterCreationComponent() {
          <AdminSectionInputField
             type='file'
             value={createChapter.coverURL ?? ''}
-            onChange={(event) =>
+            onChange={(event) => {
                setCreateChapter({ ...createChapter, coverURL: event.target.value })
-            }
+
+               const input = event.target as HTMLInputElement
+               const file = (input && input.files?.[0]) || null
+               setCover(file)
+            }}
             placeholder='Imagem de Capa'
             accept='.jpg,.jpeg,.png,.gif'
          >
@@ -124,9 +135,13 @@ export default function ChapterCreationComponent() {
          <AdminSectionInputField
             type='file'
             value={createChapter.thumbnailURL ?? ''}
-            onChange={(event) =>
+            onChange={(event) => {
                setCreateChapter({ ...createChapter, thumbnailURL: event.target.value })
-            }
+
+               const input = event.target as HTMLInputElement
+               const file = (input && input.files?.[0]) || null
+               setThumbnail(file)
+            }}
             placeholder='Thumbnail'
             accept='.jpg,.jpeg,.png,.gif'
          >
