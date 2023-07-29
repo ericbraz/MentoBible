@@ -1,4 +1,5 @@
 import { storage } from '@/config/firebase'
+import { FileType } from '@/models/interfaces'
 import { deleteField } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
@@ -122,7 +123,9 @@ export async function createSquareThumbnail(
             })
 
             if (thumbnailBlob) {
-               const squareImage = new File([thumbnailBlob], file.name, { type: thumbnailBlob.type })
+               const squareImage = new File([thumbnailBlob], file.name, {
+                  type: thumbnailBlob.type,
+               })
 
                // Get the square thumbnail as data URL
                const thumbnailURL = thumbnailCanvas.toDataURL(thumbnailBlob.type, 0.8)
@@ -139,3 +142,23 @@ export async function createSquareThumbnail(
    })
 }
 
+export function getFileNameAndTypeFromURL(url: string) {
+   const fileNameWithExtension = url.split('?')[0].substring(url.lastIndexOf('/') + 1)
+
+   const fileName = extractFileName(fileNameWithExtension.split('.')[0])
+
+   const fileType = ('.' + fileNameWithExtension.split('.').pop()) as FileType
+
+   return {
+      fileName,
+      fileType,
+   }
+}
+
+// This function below is complementary to the function above
+function extractFileName(fullFileName: string): string {
+   const splitName = fullFileName.split('%2F')[1]
+   const parts = splitName.split('-')
+   parts.shift()
+   return parts.join('-')
+}

@@ -20,19 +20,19 @@ export default class CourseModel implements Course {
    public static async find(id: string) {
       const docRef = await getDoc(doc(db, this.PATH, id))
       if (!docRef.exists()) return null
-      const categoryModel = new CourseModel(docRef.data() as Course)
-      return categoryModel
+      const courseModel = new CourseModel(docRef.data() as Course)
+      return courseModel
    }
 
    public static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, (snapshot) => {
-         const categories: CourseModel[] = []
+         const courses: CourseModel[] = []
          snapshot.forEach((document) => {
             const course = document.data()
-            const categoryModel = new CourseModel(course as Course)
-            categories.push(categoryModel)
+            const courseModel = new CourseModel(course as Course)
+            courses.push(courseModel)
          })
-         setFunction(categories)
+         setFunction(courses)
       })
       return unsubscribe
    }

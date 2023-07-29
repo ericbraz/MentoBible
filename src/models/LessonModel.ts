@@ -20,19 +20,19 @@ export default class LessonModel implements Lesson {
    public static async find(id: string) {
       const docRef = await getDoc(doc(db, this.PATH, id))
       if (!docRef.exists()) return null
-      const categoryModel = new LessonModel(docRef.data() as Lesson)
-      return categoryModel
+      const lessonModel = new LessonModel(docRef.data() as Lesson)
+      return lessonModel
    }
 
    public static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, (snapshot) => {
-         const categories: LessonModel[] = []
+         const lessons: LessonModel[] = []
          snapshot.forEach((document) => {
             const lesson = document.data()
-            const categoryModel = new LessonModel(lesson as Lesson)
-            categories.push(categoryModel)
+            const lessonModel = new LessonModel(lesson as Lesson)
+            lessons.push(lessonModel)
          })
-         setFunction(categories)
+         setFunction(lessons)
       })
       return unsubscribe
    }

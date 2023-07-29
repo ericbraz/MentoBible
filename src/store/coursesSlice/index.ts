@@ -4,18 +4,21 @@ import CategoryModel from '@/models/CategoryModel'
 import CourseModel from '@/models/CourseModel'
 import ChapterModel from '@/models/ChapterModel'
 import LessonModel from '@/models/LessonModel'
+import { LessonsCompletion } from '@/models/interfaces'
 
 export interface ReduxCoursesState {
    categories: CategoryModel[] | null
    courses: CourseModel[] | null
    chapters: ChapterModel[] | null
    lessons: LessonModel[] | null
+   lessonsCompletion: LessonsCompletion[] | null
 }
 const initialState: ReduxCoursesState = {
    categories: null,
    courses: null,
    chapters: null,
    lessons: null,
+   lessonsCompletion: null,
 }
 
 export const coursesSlice = createSlice({
@@ -34,6 +37,12 @@ export const coursesSlice = createSlice({
       rescueLessonsState: (state, { payload }: PayloadAction<LessonModel[] | null>) => {
          state.lessons = payload
       },
+      rescueLessonsCompletionState: (
+         state,
+         { payload }: PayloadAction<LessonsCompletion[] | null>
+      ) => {
+         state.lessonsCompletion = payload
+      },
    },
 })
 
@@ -43,6 +52,7 @@ export const {
    rescueCoursesState,
    rescueChaptersState,
    rescueLessonsState,
+   rescueLessonsCompletionState,
 } = coursesSlice.actions
 export const getCategoriesState = (state: RootState) => {
    return state.coursesState.categories
@@ -55,4 +65,7 @@ export const getChaptersState = (state: RootState) => {
 }
 export const getLessonsState = (state: RootState) => {
    return state.coursesState.lessons
+}
+export const getLessonsCompletionState = (state: RootState) => {
+   return state.coursesState.lessonsCompletion
 }
