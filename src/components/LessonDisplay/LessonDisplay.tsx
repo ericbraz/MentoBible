@@ -17,13 +17,7 @@ import useDifferentScreens from '@/hooks/useDifferentScreens'
 export default function LessonDisplay() {
    const { push } = useRouter()
    const params = useSearchParams()
-   const classId = params.get('cid') // cid is lessonId
-
-   const redirection = !classId
-   if (redirection) {
-      push('/dashboard')
-      return <></>
-   }
+   const classId = params.get('cid') ?? undefined // cid is lessonId
 
    const { userDataState } = useUserState()
 
@@ -36,18 +30,26 @@ export default function LessonDisplay() {
       lessonsCompletionState,
       setLessonsCompletionState,
    } = useCoursesState()
+
    const [theCourse, setTheCourse] = useState<CourseModel>()
    const [theChapter, setTheChapter] = useState<ChapterModel>()
    const [theLesson, setTheLesson] = useState<LessonModel>()
    const [listOfLesson, setListOfLesson] = useState<LessonModel[]>()
-
    const [isLessonDone, setIsLessonDone] = useState<boolean>()
+
+   // 1.1 This section handles the menu retraction effect when screen width is below 760px
+   const { biggerThanCustomScreen } = useDifferentScreens(760)
+   const [retractedSideMenu, setRetractedSideMenu] = useState(true)
+   const [invisibleText, setInvisibleText] = useState(true)
+
+   // This state is going to be used with the useEffect that checks if
+   // the lessons exists ot not. The negative means the user should be redirected
+   const [isInitialRender, setIsInitialRender] = useState(true)
 
    useEffect(() => {
       setLessonsState()
    }, [])
 
-   const [isInitialRender, setIsInitialRender] = useState(true)
    useEffect(() => {
       if (isInitialRender) {
          setIsInitialRender(false)
@@ -70,7 +72,7 @@ export default function LessonDisplay() {
    useEffect(() => {
       lessonsState && setTheLesson(lessonsState?.find((lesson) => lesson.id === classId))
       lessonsState && setLessonsCompletionState(userDataState.id, classId)
-      theCourse && setChaptersState(theCourse.id, 'courseId')
+      //theCourse && setChaptersState(theCourse.id, 'courseId')
    }, [lessonsState, classId])
 
    useEffect(() => {
@@ -97,6 +99,27 @@ export default function LessonDisplay() {
             : undefined
       )
    }, [theCourse, theChapter, theLesson])
+
+   // 1.2 This section handles the menu retraction effect when screen width is below 760px
+   function openSidebarMenu(value: boolean) {
+      const booleanExp = biggerThanCustomScreen ? false : value
+      if (booleanExp) {
+         setTimeout(() => setRetractedSideMenu(booleanExp), 500)
+         setInvisibleText(booleanExp)
+      } else {
+         setRetractedSideMenu(booleanExp)
+         setTimeout(() => setInvisibleText(booleanExp), 500)
+      }
+   }
+   useEffect(() => {
+      openSidebarMenu(!biggerThanCustomScreen)
+   }, [biggerThanCustomScreen])
+
+   const redirection = !classId
+   if (redirection) {
+      push('/dashboard')
+      return <></>
+   }
 
    function setThisLessonAsCompleted() {
       if (!!classId) {
@@ -143,29 +166,12 @@ export default function LessonDisplay() {
       return undefined
    }
 
-   const { biggerThanCustomScreen } = useDifferentScreens(760)
-   const [retractedSideMenu, setRetractedSideMenu] = useState(true)
-   const [invisibleText, setInvisibleText] = useState(true)
-   function openSidebarMenu(value: boolean) {
-      const booleanExp = biggerThanCustomScreen ? false : value
-      if (booleanExp) {
-         setTimeout(() => setRetractedSideMenu(booleanExp), 500)
-         setInvisibleText(booleanExp)
-      } else {
-         setRetractedSideMenu(booleanExp)
-         setTimeout(() => setInvisibleText(booleanExp), 500)
-      }
-   }
-   useEffect(() => {
-      openSidebarMenu(!biggerThanCustomScreen)
-   }, [biggerThanCustomScreen])
-
    return (
       <>
          {theLesson ? (
             <div className='relative grid grid-cols-3 760:grid-cols-4 px-0 550:px-8 1200:px-20 w-full h-full'>
                <div className='col-span-3 h-full w-full'>
-                  <div className='flex flex-col gap-3 text-center px-4 py-5'>
+                  <div className='flex flex-col gap-3 px-4 py-5'>
                      <h1 className='text-base 620:text-2xl font-light'>
                         {theLesson.name}
                         {!!theLesson.title && `: ${theLesson.title}`}
@@ -179,8 +185,8 @@ export default function LessonDisplay() {
                      </p>
                   </div>
                   <VideoPlayerLayout videoUrl={theLesson.videoURL} />
-                  <div className='flex flex-col gap-16 py-16'>
-                     <div className='flex flex-row justify-between px-8'>
+                  <div className='flex flex-col gap-8 py-8'>
+                     <div className='flex flex-row justify-between'>
                         {!isLessonDone ? (
                            <div
                               className='bg-zinc-700 text-sky-100 hover:bg-sky-300 hover:text-zinc-800 rounded-full px-5 py-2 cursor-pointer transition-all duration-300'
