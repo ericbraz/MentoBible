@@ -19,6 +19,7 @@ const store = configureStore({
                'coursesState/rescueCoursesState',
                'coursesState/rescueChaptersState',
                'coursesState/rescueLessonsState',
+               'coursesState/rescueLessonsCompletionState',
             ],
             ignoredPaths: [
                'coursesState.categories',
@@ -27,6 +28,7 @@ const store = configureStore({
                'userState.systems',
                'coursesState.courses',
                'coursesState.chapters',
+               'coursesState.lessonsCompletion',
             ],
          },
       }),

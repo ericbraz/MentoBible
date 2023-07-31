@@ -1,5 +1,6 @@
 'use client'
 import useCoursesState from '@/hooks/useCoursesState'
+import Link from 'next/link'
 import { useEffect } from 'react'
 
 export default function AdminCourseListPage() {
@@ -21,14 +22,17 @@ export default function AdminCourseListPage() {
       <div className='flex flex-col gap-5'>
          {categoriesState?.map((category) => (
             <div key={category.id}>
-               <div>{category.name}</div>
+               <div>
+                  {category.name} - {category.id}
+               </div>
                <div className='pl-8 text-red-700'>
                   {coursesState
                      ?.filter((course) => course.categoryId === category.id)
                      ?.map((course) => (
                         <div key={course.id}>
                            <div>
-                              {course.name} ({course.isModular ? 'Modular' : 'Não Modular'})
+                              {course.name} ({course.isModular ? 'Modular' : 'Não Modular'}) -{' '}
+                              {course.id}
                            </div>
                            <div className='ml-8 text-white bg-red-950 w-fit'>
                               {course.isModular
@@ -38,7 +42,7 @@ export default function AdminCourseListPage() {
                                          <div key={chapter.id} className='px-2'>
                                             <div>
                                                Módulo: {chapter.name} ({chapter.chapterSequence + 1}
-                                               )
+                                               ) - {chapter.id}
                                             </div>
                                             <div>
                                                {lessonsState
@@ -46,13 +50,14 @@ export default function AdminCourseListPage() {
                                                      (lesson) => lesson.chapterId === chapter.id
                                                   )
                                                   ?.map((lesson) => (
-                                                     <div
+                                                     <Link
                                                         key={lesson.id}
-                                                        className='ml-8 px-2 bg-yellow-400 text-black'
+                                                        href={`/dashboard/class?cid=${lesson.id}`}
+                                                        className='block ml-8 px-2 bg-yellow-400 text-black'
                                                      >
                                                         Aula: {lesson.name} (
-                                                        {lesson.lessonSequence + 1})
-                                                     </div>
+                                                        {lesson.lessonSequence + 1}) - {lesson.id}
+                                                     </Link>
                                                   ))}
                                             </div>
                                          </div>
@@ -60,9 +65,14 @@ export default function AdminCourseListPage() {
                                  : lessonsState
                                       ?.filter((lesson) => lesson.courseId === course.id)
                                       ?.map((lesson) => (
-                                         <div key={lesson.id} className='px-2'>
-                                            Aula: {lesson.name} ({lesson.lessonSequence + 1})
-                                         </div>
+                                         <Link
+                                            key={lesson.id}
+                                            href={`/dashboard/class?cid=${lesson.id}`}
+                                            className='block px-2'
+                                         >
+                                            Aula: {lesson.name} ({lesson.lessonSequence + 1}) -{' '}
+                                            {lesson.id}
+                                         </Link>
                                       ))}
                            </div>
                         </div>

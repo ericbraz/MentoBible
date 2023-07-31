@@ -20,19 +20,19 @@ export default class ChapterModel implements Chapter {
    public static async find(id: string) {
       const docRef = await getDoc(doc(db, this.PATH, id))
       if (!docRef.exists()) return null
-      const categoryModel = new ChapterModel(docRef.data() as Chapter)
-      return categoryModel
+      const chapterModel = new ChapterModel(docRef.data() as Chapter)
+      return chapterModel
    }
 
    public static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, (snapshot) => {
-         const categories: ChapterModel[] = []
+         const chapters: ChapterModel[] = []
          snapshot.forEach((document) => {
             const chapter = document.data()
-            const categoryModel = new ChapterModel(chapter as Chapter)
-            categories.push(categoryModel)
+            const chapterModel = new ChapterModel(chapter as Chapter)
+            chapters.push(chapterModel)
          })
-         setFunction(categories)
+         setFunction(chapters)
       })
       return unsubscribe
    }

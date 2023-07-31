@@ -70,6 +70,8 @@ export interface User {
 export interface LessonsCompletion {
    id: string
    userId: string
+   courseId: string
+   chapterId: string | null
    lessonId: string
    completionDate: Date
 }
@@ -87,3 +89,16 @@ export interface System {
    systemName: string
    systemPath: string
 }
+
+export type FileType =
+   | '.jpg'
+   | '.jpeg'
+   | '.png'
+   | '.gif'
+   | '.doc'
+   | '.docx'
+   | '.xls'
+   | '.xlsx'
+   | '.ppt'
+   | '.pptx'
+   | '.pdf'
