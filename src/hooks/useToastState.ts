@@ -35,5 +35,13 @@ export default function useToastState() {
       )
    }
 
-   return { toastState, setToastState, turnToastOff }
+   function turnLoaderToastOn() {
+      setToastState({
+         title: '',
+         description: '',
+         type: 'loader',
+      })
+   }
+
+   return { toastState, setToastState, turnToastOff, turnLoaderToastOn }
 }

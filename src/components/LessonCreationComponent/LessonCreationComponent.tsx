@@ -106,17 +106,13 @@ export default function LessonCreationComponent() {
       setCreateLesson({ ...createLesson, lessonSequence: lessonSequence ?? ERROR_LESSON_SEQUENCE })
    }, [lessonsState])
 
-   const { setToastState, turnToastOff } = useToastState()
+   const { turnLoaderToastOn, turnToastOff } = useToastState()
 
    return (
       <AdminSectionFormDivider
          title='Criar aula'
          onSubmitFunction={async () => {
-            setToastState({
-               title: '',
-               description: '',
-               type: 'loader',
-            })
+            turnLoaderToastOn()
             if (createLesson.lessonSequence === ERROR_LESSON_SEQUENCE)
                throw Error('It was not possible to set lessonSequence property')
             await courseManagement.saveLesson({
@@ -136,7 +132,10 @@ export default function LessonCreationComponent() {
          <AdminSectionInputField
             type='select'
             value={selectedCourseId ?? ''}
-            onChange={(event) => setSelectedCourseId(event.target.value)}
+            onChange={(event) => {
+               setSelectedCourseId(event.target.value)
+               setSelectedChapterId(undefined)
+            }}
             id='choose-course'
             placeholder='Escolha a categoria'
             select={courseObj}

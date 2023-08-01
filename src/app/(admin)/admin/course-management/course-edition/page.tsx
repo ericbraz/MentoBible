@@ -39,18 +39,14 @@ export default function AdminCourseEditionPage() {
    }
    const [createCategory, setCreateCategory] = useState(cleanCategoryObject)
 
-   const { setToastState, turnToastOff } = useToastState()
+   const { setToastState, turnLoaderToastOn, turnToastOff } = useToastState()
 
    return (
       <>
          <AdminSectionFormDivider
             title='Criar curso'
             onSubmitFunction={async () => {
-               setToastState({
-                  title: '',
-                  description: '',
-                  type: 'loader',
-               })
+               turnLoaderToastOn()
                await courseManagement.saveCourse({
                   ...createCourse,
                   userCreatorId: userDataState.id,

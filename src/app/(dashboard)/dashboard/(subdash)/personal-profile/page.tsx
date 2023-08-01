@@ -10,7 +10,7 @@ import { createSquareThumbnail, storeFiles } from '@/utils/modelHelper'
 import { useEffect, useRef, useState } from 'react'
 
 export default function PersonalProfilePage() {
-   const { setToastState } = useToastState()
+   const { setToastState, turnToastOff, turnLoaderToastOn } = useToastState()
 
    const { userDataState, updateUserDataState, setUserDataStateById } = useUserState()
 
@@ -54,11 +54,18 @@ export default function PersonalProfilePage() {
    const [openBioDescription, setOpenBioDescription] = useState(false)
    const textareaRef = useRef<HTMLTextAreaElement>(null)
 
+   const [loadingData, setLoadingData] = useState(false)
    useEffect(() => {
-      !userName && setUserName(userDataState.userName ?? '')
-      setBioDescription(userDataState.bioDescription)
-      setUserLocalDataState(userDataState)
+      if (!loadingData) {
+         setUserName(userDataState.userName ?? '')
+         setBioDescription(userDataState.bioDescription)
+         setUserLocalDataState(userDataState)
+         setPhotoURLString(userDataState.photoURL ?? DEFAULT_PROFILE_IMAGE)
+      }
    }, [userDataState])
+   useEffect(() => {
+      loadingData && setTimeout(() => setLoadingData(false), 300)
+   }, [loadingData])
 
    useEffect(() => {
       openUserName && inputRef.current?.focus()
@@ -74,6 +81,7 @@ export default function PersonalProfilePage() {
             className='grid grid-cols-2 col-span-2 gap-10 px-6 py-8 w-full'
             onSubmit={async (event) => {
                event.preventDefault()
+               turnLoaderToastOn()
                let formattedUser = userLocalDataState
                if (photoURL) {
                   formattedUser = {
@@ -82,8 +90,10 @@ export default function PersonalProfilePage() {
                   }
                }
                const user = new UserModel(formattedUser)
-               user.update()
-               setUserDataStateById(user.id)
+               setLoadingData(true)
+               await user.update()
+               await setUserDataStateById(user.id)
+               turnToastOff()
             }}
          >
             <div className='col-span-2 flex justify-center items-center'>
@@ -162,9 +172,7 @@ export default function PersonalProfilePage() {
             <div className='flex justify-center col-span-1'>
                <div
                   className='bg-zinc-200 hover:bg-zinc-600 hover:text-white text-center cursor-pointer rounded-xl px-8 py-3 w-full'
-                  onClick={() => {
-                     updateUserDataState()
-                  }}
+                  onClick={async () => await updateUserDataState()}
                >
                   Limpar
                </div>
