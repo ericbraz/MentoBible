@@ -115,7 +115,6 @@ export default function ChapterCreationComponent() {
 
          <AdminSectionInputField
             type='file'
-            value={createChapter.coverURL ?? ''}
             onChange={(event) => {
                setCreateChapter({ ...createChapter, coverURL: event.target.value })
 
@@ -124,13 +123,12 @@ export default function ChapterCreationComponent() {
                setCover(file)
             }}
             placeholder='Imagem de Capa'
-            accept='.jpg,.jpeg,.png,.gif'
+            accept='.jpg,.jpeg,.png,.gif,.webp'
          >
             Imagem da capa
          </AdminSectionInputField>
          <AdminSectionInputField
             type='file'
-            value={createChapter.thumbnailURL ?? ''}
             onChange={(event) => {
                setCreateChapter({ ...createChapter, thumbnailURL: event.target.value })
 
@@ -139,7 +137,7 @@ export default function ChapterCreationComponent() {
                setThumbnail(file)
             }}
             placeholder='Thumbnail'
-            accept='.jpg,.jpeg,.png,.gif'
+            accept='.jpg,.jpeg,.png,.gif,.webp'
          >
             Thumbnail
          </AdminSectionInputField>

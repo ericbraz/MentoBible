@@ -50,7 +50,7 @@ export default function AdminSectionInputField(props: AdminSectionInputFieldProp
          </div>
          <InputField
             type={type}
-            value={typeof value === 'boolean' ? value.toString() : value ?? ''}
+            value={typeof value === 'boolean' ? value.toString() : value}
             id={id}
             placeholder={placeholder}
             name={name}

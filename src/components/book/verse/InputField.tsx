@@ -4,7 +4,7 @@ import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 interface InputFieldProps {
    type: React.HTMLInputTypeAttribute
-   value: string | number | readonly string[]
+   value?: string | number | readonly string[]
    id?: string
    placeholder?: string
    name?: string

@@ -217,7 +217,7 @@ export default function LessonCreationComponent() {
                setTempImagesURL({ ...tempImagesURL, cover: file })
             }}
             placeholder='Imagem de Capa'
-            accept='.jpg,.jpeg,.png'
+            accept='.jpg,.jpeg,.png,.gif,.webp'
          >
             Imagem da capa
          </AdminSectionInputField>
@@ -229,7 +229,7 @@ export default function LessonCreationComponent() {
                setTempImagesURL({ ...tempImagesURL, thumb: file })
             }}
             placeholder='Thumbnail'
-            accept='.jpg,.jpeg,.png'
+            accept='.jpg,.jpeg,.png,.gif,.webp'
          >
             Thumbnail
          </AdminSectionInputField>
