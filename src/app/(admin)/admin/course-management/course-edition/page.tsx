@@ -9,7 +9,18 @@ import useToastState from '@/hooks/useToastState'
 import useUserState from '@/hooks/useUserState'
 import { Category, Course } from '@/models/interfaces'
 import CourseService from '@/service/CourseService'
-import { useState } from 'react'
+import { storeFiles } from '@/utils/modelHelper'
+import { useEffect, useState } from 'react'
+
+interface CategorySetOfImages {
+   categoryCover: File | null
+   categoryThumb: File | null
+}
+
+interface CourseSetOfImages {
+   courseCover: File | null
+   courseThumb: File | null
+}
 
 export default function AdminCourseEditionPage() {
    const { userDataState } = useUserState()
@@ -26,20 +37,28 @@ export default function AdminCourseEditionPage() {
       name: '',
       isActive: 'creation',
       isModular: false,
-      description: '',
-      thumbnailURL: '',
-      coverURL: '',
+      description: undefined,
+      thumbnailURL: undefined,
+      coverURL: undefined,
    }
    const [createCourse, setCreateCourse] = useState(cleanCourseObject)
+   const [categorySetOfImages, setCategorySetOfImages] = useState<CategorySetOfImages>({
+      categoryCover: null,
+      categoryThumb: null,
+   })
 
    const cleanCategoryObject: Omit<Category, 'id' | 'userCreatorId'> = {
       name: '',
-      thumbnailURL: '',
-      coverURL: '',
+      thumbnailURL: undefined,
+      coverURL: undefined,
    }
    const [createCategory, setCreateCategory] = useState(cleanCategoryObject)
+   const [courseSetOfImages, setCourseSetOfImages] = useState<CourseSetOfImages>({
+      courseCover: null,
+      courseThumb: null,
+   })
 
-   const { setToastState, turnLoaderToastOn, turnToastOff } = useToastState()
+   const { turnLoaderToastOn, turnToastOff } = useToastState()
 
    return (
       <>
@@ -50,6 +69,8 @@ export default function AdminCourseEditionPage() {
                await courseManagement.saveCourse({
                   ...createCourse,
                   userCreatorId: userDataState.id,
+                  coverURL: await storeFiles(courseSetOfImages.courseCover, 'cover'),
+                  thumbnailURL: await storeFiles(courseSetOfImages.courseThumb, 'thumb'),
                })
                setCreateCourse(cleanCourseObject)
                turnToastOff()
@@ -115,23 +136,25 @@ export default function AdminCourseEditionPage() {
 
             <AdminSectionInputField
                type='file'
-               value={createCourse.coverURL ?? ''}
-               onChange={(event) =>
-                  setCreateCourse({ ...createCourse, coverURL: event.target.value })
-               }
+               onChange={(event) => {
+                  const input = event.target as HTMLInputElement
+                  const file = (input && input.files?.[0]) || null
+                  setCourseSetOfImages({ ...courseSetOfImages, courseCover: file })
+               }}
                placeholder='Imagem de Capa'
-               accept='.jpg,.jpeg,.png,.gif'
+               accept='.jpg,.jpeg,.png,.gif,.webp'
             >
                Imagem da capa
             </AdminSectionInputField>
             <AdminSectionInputField
                type='file'
-               value={createCourse.thumbnailURL ?? ''}
-               onChange={(event) =>
-                  setCreateCourse({ ...createCourse, thumbnailURL: event.target.value })
-               }
+               onChange={(event) => {
+                  const input = event.target as HTMLInputElement
+                  const file = (input && input.files?.[0]) || null
+                  setCourseSetOfImages({ ...courseSetOfImages, courseThumb: file })
+               }}
                placeholder='Thumbnail'
-               accept='.jpg,.jpeg,.png,.gif'
+               accept='.jpg,.jpeg,.png,.gif,.webp'
             >
                Thumbnail
             </AdminSectionInputField>
@@ -142,14 +165,12 @@ export default function AdminCourseEditionPage() {
          <AdminSectionFormDivider
             title='Criar categoria'
             onSubmitFunction={async () => {
-               setToastState({
-                  title: '',
-                  description: '',
-                  type: 'loader',
-               })
+               turnLoaderToastOn()
                await courseManagement.saveCategory({
                   ...createCategory,
                   userCreatorId: userDataState.id,
+                  coverURL: await storeFiles(categorySetOfImages.categoryCover, 'cover'),
+                  thumbnailURL: await storeFiles(categorySetOfImages.categoryThumb, 'thumb'),
                })
                setCreateCategory(cleanCategoryObject)
                turnToastOff()
@@ -171,23 +192,25 @@ export default function AdminCourseEditionPage() {
             </AdminSectionInputField>
             <AdminSectionInputField
                type='file'
-               value={createCategory.coverURL ?? ''}
-               onChange={(event) =>
-                  setCreateCategory({ ...createCategory, coverURL: event.target.value })
-               }
+               onChange={(event) => {
+                  const input = event.target as HTMLInputElement
+                  const file = (input && input.files?.[0]) || null
+                  setCategorySetOfImages({ ...categorySetOfImages, categoryCover: file })
+               }}
                placeholder='Imagem de Capa'
-               accept='.jpg,.jpeg,.png,.gif'
+               accept='.jpg,.jpeg,.png,.gif,.webp'
             >
                Imagem da capa
             </AdminSectionInputField>
             <AdminSectionInputField
                type='file'
-               value={createCategory.thumbnailURL ?? ''}
-               onChange={(event) =>
-                  setCreateCategory({ ...createCategory, thumbnailURL: event.target.value })
-               }
+               onChange={(event) => {
+                  const input = event.target as HTMLInputElement
+                  const file = (input && input.files?.[0]) || null
+                  setCategorySetOfImages({ ...categorySetOfImages, categoryThumb: file })
+               }}
                placeholder='Thumbnail'
-               accept='.jpg,.jpeg,.png,.gif'
+               accept='.jpg,.jpeg,.png,.gif,.webp'
             >
                Thumbnail
             </AdminSectionInputField>
