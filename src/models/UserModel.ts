@@ -84,16 +84,22 @@ export default class UserModel implements User {
       UserModel.find(this.id)
          ?.then(async (userData) => {
             this.previousImage = userData?.photoURL
-            console.log(this.previousImage)
             const imageRef = !!this.previousImage && ref(storage, this.previousImage)
             !!imageRef && (await deleteObject(imageRef))
          })
          .then(async () => {
-            const userDataToUpdate = filterUndefinedInObjectsToExclusion({
-               userName: this.userName,
-               bioDescription: this.bioDescription,
-               photoURL: this.photoURL,
-            })
+            const userDataToUpdate = filterUndefinedInObjectsToExclusion(
+               !!this.photoURL
+                  ? {
+                       userName: this.userName,
+                       bioDescription: this.bioDescription,
+                       photoURL: this.photoURL,
+                    }
+                  : {
+                       userName: this.userName,
+                       bioDescription: this.bioDescription,
+                    }
+            )
             await updateDoc(docRef, userDataToUpdate)
          })
    }

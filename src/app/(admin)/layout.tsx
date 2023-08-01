@@ -13,11 +13,9 @@ import {
 import Image from 'next/image'
 import useUserState from '@/hooks/useUserState'
 import AdminPrivateRoute from './AdminPrivateRoute'
-import { DEFAULT_PROFILE_IMAGE } from '@/constants/firebase'
 
 export default function AdminSectionLayout({ children }: { children: React.ReactNode }) {
-   const { userDataState } = useUserState()
-   const photo = userDataState.photoURL ?? DEFAULT_PROFILE_IMAGE
+   const { userPhoto, userDataState } = useUserState()
 
    return (
       <AdminPrivateRoute>
@@ -44,9 +42,15 @@ export default function AdminSectionLayout({ children }: { children: React.React
                      { title: 'Categorias', url: '/admin/course-management/categories' },
                      { title: 'Lista de cursos', url: '/admin/course-management/course-list' },
                      { title: 'Edição de curso', url: '/admin/course-management/course-edition' },
-                     { title: 'Edição de módulos', url: '/admin/course-management/chapter-edition' },
+                     {
+                        title: 'Edição de módulos',
+                        url: '/admin/course-management/chapter-edition',
+                     },
                      { title: 'Edição de aulas', url: '/admin/course-management/lesson-edition' },
-                     { title: 'Excluir ou inativar curso', url: '/admin/course-management/course-deletion' },
+                     {
+                        title: 'Excluir ou inativar curso',
+                        url: '/admin/course-management/course-deletion',
+                     },
                   ]}
                >
                   <BsFillBookFill size={21} />
@@ -63,7 +67,7 @@ export default function AdminSectionLayout({ children }: { children: React.React
                <Link href='/dashboard'>Sair</Link>
                <span>{userDataState.firstName}</span>
                <Image
-                  src={photo}
+                  src={userPhoto}
                   alt='User Avatar'
                   width={50}
                   height={50}

@@ -53,17 +53,13 @@ export default function ChapterCreationComponent() {
       })
    }, [chaptersState])
 
-   const { setToastState, turnToastOff } = useToastState()
+   const { turnLoaderToastOn, turnToastOff } = useToastState()
 
    return (
       <AdminSectionFormDivider
          title='Criar módulo'
          onSubmitFunction={async () => {
-            setToastState({
-               title: '',
-               description: '',
-               type: 'loader',
-            })
+            turnLoaderToastOn()
             const thumbnailURL = await storeFiles(thumbnail, 'cover')
             const coverURL = await storeFiles(cover, 'cover')
             await courseManagement.saveChapter({

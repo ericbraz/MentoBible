@@ -113,8 +113,8 @@ class AuthService {
       if (password[0] !== confirmPassword[0]) throw new Error('Passwords must match')
    }
 
-   public static getUserData(id: string) {
-      return UserModel.find(id)
+   public static async getUserData(id: string) {
+      return await UserModel.find(id)
    }
 }
 

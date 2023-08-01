@@ -1,3 +1,4 @@
+import { DEFAULT_PROFILE_IMAGE } from '@/constants/firebase'
 import AuthService from '@/service/AuthService'
 import {
    changeUserState,
@@ -7,7 +8,7 @@ import {
 } from '@/store/userState/userSlice'
 import { FormattedUserState, userStateFormatter } from '@/utils/authUserHelper'
 import { User as FirebaseUser } from 'firebase/auth'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 export default function useUserState() {
@@ -21,13 +22,13 @@ export default function useUserState() {
    const userDataState = useSelector(getUserData)
    const setUserDataState = async function (currentUserState: FormattedUserState) {
       const id = currentUserState.userId
-      updateUserById(id)
+      await updateUserById(id)
    }
    const setUserDataStateById = async function (id: string) {
-      updateUserById(id)
+      await updateUserById(id)
    }
    const updateUserDataState = async function () {
-      setUserDataState(userState)
+      await setUserDataState(userState)
    }
 
    useEffect(() => {
@@ -40,6 +41,11 @@ export default function useUserState() {
       !userDataState.active && setUserDataState(userState)
    }, [userState])
 
+   const [userPhoto, setUserPhoto] = useState(userDataState.photoURL ?? DEFAULT_PROFILE_IMAGE)
+   useEffect(() => {
+      setUserPhoto(userDataState.photoURL ?? DEFAULT_PROFILE_IMAGE)
+   }, [userDataState])
+
    async function updateUserById(id?: string | null) {
       if (id) {
          const newUserState = await AuthService.getUserData(id)
@@ -47,5 +53,12 @@ export default function useUserState() {
       }
    }
 
-   return { userState, setUserState, userDataState, updateUserDataState, setUserDataStateById }
+   return {
+      userPhoto,
+      userState,
+      setUserState,
+      userDataState,
+      updateUserDataState,
+      setUserDataStateById,
+   }
 }
