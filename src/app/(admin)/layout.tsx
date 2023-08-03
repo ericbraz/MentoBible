@@ -19,7 +19,7 @@ export default function AdminSectionLayout({ children }: { children: React.React
 
    return (
       <AdminPrivateRoute>
-         <header className='fixed bg-slate-950 flex flex-col gap-8 h-screen w-60 z-[1]'>
+         <header className='fixed bg-slate-950 flex flex-col gap-8 h-screen w-60 z-[2]'>
             <div className='bg-[rgb(8,14,32)] flex flex-row items-center justify-start pl-4 border-transparent border-b shadow-lg h-16'>
                <Logo />
             </div>
@@ -63,7 +63,7 @@ export default function AdminSectionLayout({ children }: { children: React.React
             </nav>
          </header>
          <div className='bg-[#f6f7fb] text-black mb-16 min-h-screen h-full w-full'>
-            <div className='fixed flex flex-row items-center justify-end gap-5 bg-white border-transparent border-b shadow-lg pl-[18rem] pr-14 h-16 w-full z-0'>
+            <div className='fixed flex flex-row items-center justify-end gap-5 bg-white border-transparent border-b shadow-lg pl-[18rem] pr-14 h-16 w-full z-[1]'>
                <Link href='/dashboard'>Sair</Link>
                <span>{userDataState.firstName}</span>
                <Image

@@ -1,4 +1,4 @@
-import { Query, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore'
+import { Query, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore'
 import { Lesson, CourseCreationType } from './interfaces'
 import { db } from '@/config/firebase'
 import { generateID } from '@/utils/modelHelper'
@@ -35,6 +35,11 @@ export default class LessonModel implements Lesson {
          setFunction(lessons)
       })
       return unsubscribe
+   }
+
+   public static async updateStatus(obj: LessonModel, statusType: CourseCreationType) {
+      const docRef = doc(db, LessonModel.PATH, obj.id)
+      await updateDoc(docRef, { isActive: statusType })
    }
 
    public get id()                       { return this.lesson.id }
@@ -79,15 +84,16 @@ export default class LessonModel implements Lesson {
       return await deleteDoc(docRef)
    }
 
-   private createFullerCategoryModel(lesson: Omit<Lesson, 'isActive'>) {
+   private createFullerCategoryModel(lesson: Omit<Lesson, 'isActive'> & { isActive?: CourseCreationType }) {
+      const activation = lesson.isActive ?? 'creation'
       if (lesson.creationDate instanceof Date)
-         return { ...lesson, isActive: 'creation' as CourseCreationType }
+         return { ...lesson, isActive: activation }
 
       const { creationDate, ...rest } = { ...lesson }
       const timestamp = creationDate
       return {
          ...rest,
-         isActive: 'creation' as CourseCreationType,
+         isActive: activation,
          creationDate: timestamp instanceof Date ? timestamp : new Date(),
       }
    }

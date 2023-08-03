@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './userState/userSlice'
 import toastReducer from './toastSlice'
 import coursesReducer from './coursesSlice'
+import modalReducer from './modalSlice'
 
 const store = configureStore({
    reducer: {
       userState: userReducer,
       toastState: toastReducer,
       coursesState: coursesReducer,
+      modalState: modalReducer,
    },
    middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

@@ -97,8 +97,6 @@ export default function useCoursesState() {
       const lessonsCompletionRef = collection(db, LessonsCompletionModel.PATH)
       const partialQuery = query(lessonsCompletionRef, orderBy('completionDate'))
       if (!!userId && !!lessonId) {
-         //const data = await LessonsCompletionModel.find(id)
-         //data && setLessonsCompletion([data])
          const mainQuery = query(
             partialQuery,
             where('userId', '==', userId),
@@ -109,7 +107,7 @@ export default function useCoursesState() {
          const mainQuery = query(partialQuery, where('userId', '==', userId))
          LessonsCompletionModel.listenToQuery(mainQuery, setLessonsCompletion)
       }
-   } // 'userId' | 'lessonId'
+   }
 
    useEffect(() => {
       setCategoriesState()
