@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import ReduxProvider from './ReduxProvider'
 import ToastNotification from '@/components/book/verse/ToastNotification'
 import LoaderComponent from '@/components/book/verse/LoaderComponent'
+import FunctionalModal from '@/components/book/verse/FunctionalModal'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
                <ToastNotification />
                <LoaderComponent />
+               <FunctionalModal />
             </ReduxProvider>
          </body>
       </html>

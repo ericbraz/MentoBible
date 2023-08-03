@@ -1,4 +1,4 @@
-import { Query, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore'
+import { Query, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore'
 import { Chapter, CourseCreationType } from './interfaces'
 import { db } from '@/config/firebase'
 import { generateID } from '@/utils/modelHelper'
@@ -37,6 +37,11 @@ export default class ChapterModel implements Chapter {
       return unsubscribe
    }
 
+   public static async updateStatus(obj: ChapterModel, statusType: CourseCreationType) {
+      const docRef = doc(db, ChapterModel.PATH, obj.id)
+      await updateDoc(docRef, { isActive: statusType })
+   }
+
    public get id()                  { return this.chapter.id }
    public get courseId()            { return this.chapter.courseId }
    public get name()                { return this.chapter.name }
@@ -73,15 +78,16 @@ export default class ChapterModel implements Chapter {
       return await deleteDoc(docRef)
    }
 
-   private createFullerChapterModel(chapter: Omit<Chapter, 'isActive'>) {
+   private createFullerChapterModel(chapter: Omit<Chapter, 'isActive'> & { isActive?: CourseCreationType }) {
+      const activation = chapter.isActive ?? 'creation'
       if (chapter.creationDate instanceof Date)
-         return { ...chapter, isActive: 'creation' as CourseCreationType }
+         return { ...chapter, isActive: activation }
 
       const { creationDate, ...rest } = { ...chapter }
       const timestamp = creationDate
       return {
          ...rest,
-         isActive: 'creation' as CourseCreationType,
+         isActive: activation,
          creationDate: timestamp instanceof Date ? timestamp : new Date(),
       }
    }
