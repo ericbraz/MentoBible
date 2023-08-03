@@ -22,6 +22,7 @@ const store = configureStore({
                'coursesState/rescueChaptersState',
                'coursesState/rescueLessonsState',
                'coursesState/rescueLessonsCompletionState',
+               'modalState/changeModalState',
             ],
             ignoredPaths: [
                'coursesState.categories',
@@ -31,6 +32,7 @@ const store = configureStore({
                'coursesState.courses',
                'coursesState.chapters',
                'coursesState.lessonsCompletion',
+               'modalState.onClick',
             ],
          },
       }),

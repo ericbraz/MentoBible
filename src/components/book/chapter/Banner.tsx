@@ -25,7 +25,14 @@ export default function Banner() {
                   index === idx ? 'block bg-opacity-1' : 'hidden bg-opacity-0'
                } transition duration-300 relative top-0 left-0 right-0 w-screen h-[500px]`}
             >
-               <Image src={image.img} alt={image.alt} className='object-cover' fill priority />
+               <Image
+                  src={image.img}
+                  alt={image.alt}
+                  className='object-cover'
+                  sizes='(max-width: 100%) 100%, (max-width: 100%) 100%'
+                  fill
+                  priority
+               />
                <div className='top-image-gradient absolute top-0 left-0 right-0 flex flex-col justify-center w-screen h-[500px] px-12 sm:px-36 lg:px-52'>
                   <h1 className='text-2xl 550:text-4xl font-semibold 550:font-bold text-slate-200 mb-4'>
                      {image.title}
