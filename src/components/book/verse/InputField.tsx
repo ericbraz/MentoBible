@@ -1,6 +1,6 @@
 'use client'
 import { generateID } from '@/utils/modelHelper'
-import { forwardRef, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 interface InputFieldProps {
    type: React.HTMLInputTypeAttribute
@@ -60,6 +60,14 @@ const InputField = forwardRef<InputRef, InputFieldProps>(
          },
       }))
 
+      // This section avoids the error message: " Warning: Prop `id` did not match. "
+      const [idState, setIdState] = useState<string>()
+      useEffect(() => {
+         if (!!idState) return
+
+         setIdState(id ?? generateID())
+      }, [])
+
       return (
          <div
             className={`input-field flex flex-col text-black ${className ?? ''} ${
@@ -82,7 +90,7 @@ const InputField = forwardRef<InputRef, InputFieldProps>(
                         type !== 'file' ? 'bg-[rgba(255,255,255,0.6)]' : ''
                      } placeholder-slate-500`}
                      type={type}
-                     id={id ?? generateID()}
+                     id={idState}
                      placeholder={placeholder}
                      name={name}
                      value={value}

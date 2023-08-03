@@ -3,7 +3,7 @@ import useToastState from '@/hooks/useToastState'
 import { ColorRing } from 'react-loader-spinner'
 
 export default function LoaderComponent() {
-   const { toastState, turnToastOff } = useToastState()
+   const { toastState } = useToastState()
    const { type, visibility } = toastState
 
    return (

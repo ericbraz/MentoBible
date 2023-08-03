@@ -56,6 +56,7 @@ export default function ThumbnailDisplay({
             fill
             priority={priority}
             className='rounded-md'
+            sizes='(max-width: 100%) 100%, (max-width: 100%) 100%'
          />
          {text && (
             <div

@@ -17,7 +17,7 @@ const initialState: FunctionalModalObject = {
 }
 
 export const modalSlice = createSlice({
-   name: 'toastState',
+   name: 'modalState',
    initialState,
    reducers: {
       changeModalState: (state, { payload }: PayloadAction<FunctionalModalObject>) => {
