@@ -122,7 +122,7 @@ export default function LessonDisplay() {
    // if it returns undefined means there is no next lesson to display
    function nextId() {
       if (!listOfLesson || listOfLesson?.length === 0) return undefined
-      if (!chaptersState || chaptersState.length === 0) return undefined
+      //if (!chaptersState || chaptersState.length === 0) return undefined
 
       const currentIndex = listOfLesson?.findIndex((lesson) => lesson.id === classId)
       if (typeof currentIndex === 'undefined' || currentIndex === -1) return undefined
@@ -131,21 +131,23 @@ export default function LessonDisplay() {
       const nextIndex = currentIndex !== listOfLesson?.length - 1 ? currentIndex + 1 : undefined
       if (nextIndex) return listOfLesson[nextIndex].id
 
-      // if this is the last chapter there is no next lesson whatsoever
-      const allChaptersIds = chaptersState.map((chapter) => chapter.id)
-      const lastChapter = allChaptersIds[allChaptersIds.length - 1]
-      if (lastChapter === theLesson?.chapterId) return undefined
+      if (!!chaptersState && chaptersState.length !== 0) {
+         // if this is the last chapter there is no next lesson whatsoever
+         const allChaptersIds = chaptersState.map((chapter) => chapter.id)
+         const lastChapter = allChaptersIds[allChaptersIds.length - 1]
+         if (lastChapter === theLesson?.chapterId) return undefined
 
-      // time to run through the chapters looking for the next lesson
-      const listOfChapters = chaptersState
-         .filter((chapter) => chapter.id !== theLesson?.chapterId) //excludes current chapter
-         .map((chapter) => chapter.id)
-      let lessonsFromThatChapId: LessonModel | undefined = undefined
-      for (let idx = 0; idx < listOfChapters.length; idx++) {
-         lessonsFromThatChapId = lessonsState?.find(
-            (lessons) => lessons.chapterId === listOfChapters[idx]
-         )
-         if (lessonsFromThatChapId) return lessonsFromThatChapId?.id
+         // time to run through the chapters looking for the next lesson
+         const listOfChapters = chaptersState
+            .filter((chapter) => chapter.id !== theLesson?.chapterId) //excludes current chapter
+            .map((chapter) => chapter.id)
+         let lessonsFromThatChapId: LessonModel | undefined = undefined
+         for (let idx = 0; idx < listOfChapters.length; idx++) {
+            lessonsFromThatChapId = lessonsState?.find(
+               (lessons) => lessons.chapterId === listOfChapters[idx]
+            )
+            if (lessonsFromThatChapId) return lessonsFromThatChapId?.id
+         }
       }
 
       return undefined
@@ -201,7 +203,7 @@ export default function LessonDisplay() {
                               !isLessonDone && setThisLessonAsCompleted()
                               nextId()
                                  ? push(`/dashboard/class?cid=${nextId()}`)
-                                 : push('/dashboard')
+                                 : push(`/dashboard/conclusion?course=${theLesson.courseId}`)
                            }}
                         >
                            {nextId() ? (
