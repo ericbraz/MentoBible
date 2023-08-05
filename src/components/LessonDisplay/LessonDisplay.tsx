@@ -13,6 +13,7 @@ import ChapterModel from '@/models/ChapterModel'
 import Link from 'next/link'
 import FileTypeIcon from '../book/verse/FileTypeIcon'
 import useDifferentScreens from '@/hooks/useDifferentScreens'
+import useRouterRedirection from '@/hooks/useRouterRedirection'
 
 export default function LessonDisplay() {
    const { push } = useRouter()
@@ -42,28 +43,9 @@ export default function LessonDisplay() {
    const [retractedSideMenu, setRetractedSideMenu] = useState(true)
    const [invisibleText, setInvisibleText] = useState(true)
 
-   // This state is going to be used with the useEffect that checks if
-   // the lessons exists ot not. The negative means the user should be redirected
-   const [isInitialRender, setIsInitialRender] = useState(true)
-
    useEffect(() => {
       setLessonsState()
    }, [])
-
-   useEffect(() => {
-      if (isInitialRender) {
-         setIsInitialRender(false)
-         return
-      }
-
-      /* The if statement above avoids this useEffect from running in the first render.
-       * The purpose is to check if the lesson exists or not.
-       * The negative means the user must be redirected to dashboard page.
-       */
-
-      const lessonExists = lessonsState?.find((lesson) => lesson.id === classId)
-      !lessonExists && push('/dashboard')
-   }, [lessonsState])
 
    useEffect(() => {
       theCourse && setChaptersState(theCourse.id, 'courseId')
@@ -115,11 +97,14 @@ export default function LessonDisplay() {
       openSidebarMenu(!biggerThanCustomScreen)
    }, [biggerThanCustomScreen])
 
-   const redirection = !classId
-   if (redirection) {
-      push('/dashboard')
-      return <></>
-   }
+   useRouterRedirection(
+      () => {
+         const lessonExists = lessonsState?.find((lesson) => lesson.id === classId)
+         return !lessonExists || !classId
+      },
+      lessonsState,
+      '/dashboard'
+   )
 
    function setThisLessonAsCompleted() {
       if (!!classId) {

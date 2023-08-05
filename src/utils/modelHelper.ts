@@ -162,3 +162,15 @@ function extractFileName(fullFileName: string): string {
    parts.shift()
    return parts.join('-')
 }
+
+export function equalArrays<T>(arr1: T[], arr2: T[]) {
+   if (arr1.length !== arr2.length) return false
+
+   arr1.sort()
+   arr2.sort()
+   for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false
+   }
+
+   return true
+}
