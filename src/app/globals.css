@@ -63,3 +63,7 @@ body {
    background: rgb(20, 17, 17);
    background: linear-gradient(180deg, rgba(20, 17, 17, 1) 0%, rgba(20, 17, 17, 0) 90%);
 }
+
+.transition-grid {
+   transition: padding 150ms;
+}

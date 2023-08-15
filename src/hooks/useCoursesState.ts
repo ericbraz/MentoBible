@@ -90,7 +90,12 @@ export default function useCoursesState() {
    }
 
    const lessonsCompletionState = useSelector(getLessonsCompletionState)
-   const setLessonsCompletionState = async function (userId: string, lessonId?: string) {
+   const setLessonsCompletionState = async function (
+      userId: string,
+      lessonId?: string,
+      chapterId?: string,
+      courseId?: string
+   ) {
       const setLessonsCompletion = (lessonsCompletion: LessonsCompletionModel[]) => {
          dispatch(rescueLessonsCompletionState(lessonsCompletion))
       }
@@ -101,6 +106,20 @@ export default function useCoursesState() {
             partialQuery,
             where('userId', '==', userId),
             where('lessonId', '==', lessonId)
+         )
+         LessonsCompletionModel.listenToQuery(mainQuery, setLessonsCompletion)
+      } else if (!!userId && !!chapterId) {
+         const mainQuery = query(
+            partialQuery,
+            where('userId', '==', userId),
+            where('courseId', '==', chapterId)
+         )
+         LessonsCompletionModel.listenToQuery(mainQuery, setLessonsCompletion)
+      } else if (!!userId && !!courseId) {
+         const mainQuery = query(
+            partialQuery,
+            where('userId', '==', userId),
+            where('courseId', '==', courseId)
          )
          LessonsCompletionModel.listenToQuery(mainQuery, setLessonsCompletion)
       } else if (!!userId) {

@@ -1,5 +1,6 @@
 import {
    Query,
+   Timestamp,
    Unsubscribe,
    deleteDoc,
    doc,
@@ -86,11 +87,11 @@ export default class CourseModel implements Course {
          return { ...course, isActive: activation }
 
       const { creationDate, ...rest } = { ...course }
-      const timestamp = creationDate
+      const timestamp = creationDate instanceof Date ? creationDate : creationDate as unknown as Timestamp
       return {
          ...rest,
          isActive: activation,
-         creationDate: timestamp instanceof Date ? timestamp : new Date(),
+         creationDate: timestamp instanceof Date ? timestamp : timestamp.toDate(),
       }
    }
 }

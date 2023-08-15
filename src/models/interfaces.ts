@@ -20,6 +20,7 @@ export interface Course {
    thumbnailURL?: string
    coverURL?: string
    userCreatorId: string
+   topics?: string[]
 }
 
 export interface Chapter {
@@ -65,6 +66,7 @@ export interface User {
    signUpDate?: Date
    courseIds?: string[]
    lessonCompletionIds?: string[]
+   nextLessons?: string[]
 }
 
 export interface LessonsCompletion {
@@ -102,3 +104,20 @@ export type FileType =
    | '.ppt'
    | '.pptx'
    | '.pdf'
+
+export interface CardProperties {
+   id: string
+   name: string
+   isActive: CourseCreationType
+   isModular?: boolean
+   categoryId?: string
+   courseId?: string
+   chapterId?: string
+   thumbnailURL?: string
+   coverURL?: string
+   type: CardPropertiesType
+}
+export type CardPropertiesType = 'course' | 'chapter' | 'lesson'
+
+// Type used in useActiveCourses.ts custom hook
+export type SelectedCourse = 'fresh' | 'old' | /* 'popular' | 'restart' | */ 'topic' | 'selected'

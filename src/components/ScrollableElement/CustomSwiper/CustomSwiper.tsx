@@ -3,6 +3,8 @@ import SwiperCore, { Virtual, Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import useDifferentScreens from '@/hooks/useDifferentScreens'
 import Card from '@/components/book/verse/Card'
+import { CardProperties } from '@/models/interfaces'
+import { ADMIN_COURSE_NAME_EXPOSITION_SLIDES } from '@/constants/config'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -11,34 +13,46 @@ import 'swiper/css/navigation'
 SwiperCore.use([Virtual, Navigation, Pagination])
 
 export default function CustomSwiper({
+   sectionTitle,
    slides,
    cardFormat,
+   topSection,
 }: {
-   slides: any[]
+   sectionTitle: string
+   slides: CardProperties[]
    cardFormat: 'vertical' | 'square'
+   topSection?: boolean
 }) {
    const breakpoints = {
-      // Default parameters
       0: { slidesPerView: 1.5, spaceBetween: 10 },
-      // when window width is >= 360px
       380: { slidesPerView: 1.5, spaceBetween: -40 },
-      // when window width is >= 500px
       620: { slidesPerView: 3.5, spaceBetween: '0.04vw' },
-      // when window width is >= 640px
       760: { slidesPerView: 4.5, spaceBetween: '0.02vw' },
    }
 
    const { biggerThanCustomScreen } = useDifferentScreens(620)
 
    return (
-      <div className={`flex flex-row gap-8 py-5 right-12`}>
-         <Swiper breakpoints={breakpoints} navigation={biggerThanCustomScreen}>
-            {slides.map((slideContent) => (
-               <SwiperSlide key={slideContent}>
-                  <Card cardFormat={cardFormat}>{slideContent}</Card>
-               </SwiperSlide>
-            ))}
-         </Swiper>
-      </div>
+      <>
+         <h2 className={`text-2xl font-semibold ${!!topSection ? 'mt-12' : 'mt-0'} mb-3`}>
+            {sectionTitle}
+         </h2>
+         <div className={`py-5`}>
+            <Swiper breakpoints={breakpoints} navigation={biggerThanCustomScreen}>
+               {slides.map((slideContent) => (
+                  <SwiperSlide key={slideContent.id}>
+                     <Card
+                        slideContent={slideContent}
+                        image={slideContent.thumbnailURL}
+                        cardFormat={cardFormat}
+                        topSection={topSection}
+                     >
+                        {ADMIN_COURSE_NAME_EXPOSITION_SLIDES ? slideContent.name : ''}
+                     </Card>
+                  </SwiperSlide>
+               ))}
+            </Swiper>
+         </div>
+      </>
    )
 }

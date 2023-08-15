@@ -1,4 +1,13 @@
-import { Query, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore'
+import {
+   Query,
+   Timestamp,
+   Unsubscribe,
+   deleteDoc,
+   doc,
+   getDoc,
+   onSnapshot,
+   setDoc,
+} from 'firebase/firestore'
 import { LessonsCompletion } from './interfaces'
 import { db } from '@/config/firebase'
 import { generateID } from '@/utils/modelHelper'
@@ -32,7 +41,9 @@ export default class LessonsCompletionModel implements LessonsCompletion {
          const lessonsCompleted: LessonsCompletionModel[] = []
          snapshot.forEach((document) => {
             const lessonsCompletion = document.data()
-            const lessonsCompletionModel = new LessonsCompletionModel(lessonsCompletion as LessonsCompletion)
+            const lessonsCompletionModel = new LessonsCompletionModel(
+               lessonsCompletion as LessonsCompletion
+            )
             lessonsCompleted.push(lessonsCompletionModel)
          })
          setFunction(lessonsCompleted)
@@ -64,10 +75,22 @@ export default class LessonsCompletionModel implements LessonsCompletion {
       return await deleteDoc(docRef)
    }
 
-   private createFullerCategoryModel(lessonsCompletion: Omit<LessonsCompletion, 'completionDate'>) {
+   private createFullerCategoryModel(
+      lessonsCompletion: Omit<LessonsCompletion, 'completionDate'> & { completionDate?: Date }
+   ) {
+      if (!lessonsCompletion.completionDate) {
+         return {
+            ...lessonsCompletion,
+            completionDate: new Date(),
+         }
+      }
+
+      const { completionDate, ...rest } = { ...lessonsCompletion }
+      const timestamp =
+         completionDate instanceof Date ? completionDate : (completionDate as unknown as Timestamp)
       return {
-         ...lessonsCompletion,
-         completionDate: new Date(),
+         ...rest,
+         completionDate: timestamp instanceof Date ? timestamp : timestamp.toDate(),
       }
    }
 }
