@@ -1,4 +1,4 @@
-import { Query, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore'
+import { Query, Timestamp, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore'
 import { Category } from './interfaces'
 import { db } from '@/config/firebase'
 import { generateID } from '@/utils/modelHelper'
@@ -65,10 +65,10 @@ export default class CategoryModel implements Category {
       if (category.creationDate instanceof Date) return category
 
       const { creationDate, ...rest } = { ...category }
-      const timestamp = creationDate
+      const timestamp = creationDate instanceof Date ? creationDate : creationDate as unknown as Timestamp
       return {
          ...rest,
-         creationDate: timestamp instanceof Date ? timestamp : new Date(),
+         creationDate: timestamp instanceof Date ? timestamp : timestamp.toDate(),
       }
    }
 }

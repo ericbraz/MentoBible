@@ -16,7 +16,6 @@ export default function useRouterRedirection<T>(
     */
    const [isInitialRender, setIsInitialRender] = useState(true)
    useEffect(() => {
-      console.log('test')
       if (isInitialRender && !isComponentUnmounted.current) {
          setIsInitialRender(false)
          return

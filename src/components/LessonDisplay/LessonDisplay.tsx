@@ -7,13 +7,13 @@ import LessonModel from '@/models/LessonModel'
 import { BsArrowRight, BsCheckAll } from 'react-icons/bs'
 import { BiSolidRightArrow, BiSolidLeftArrow } from 'react-icons/bi'
 import useUserState from '@/hooks/useUserState'
-import LessonsCompletionModel from '@/models/LessonsCompletionModel'
 import CourseModel from '@/models/CourseModel'
 import ChapterModel from '@/models/ChapterModel'
 import Link from 'next/link'
 import FileTypeIcon from '../book/verse/FileTypeIcon'
 import useDifferentScreens from '@/hooks/useDifferentScreens'
 import useRouterRedirection from '@/hooks/useRouterRedirection'
+import { nextLesson } from '@/utils/platformHelper'
 
 export default function LessonDisplay() {
    const { push } = useRouter()
@@ -54,7 +54,6 @@ export default function LessonDisplay() {
    useEffect(() => {
       lessonsState && setTheLesson(lessonsState?.find((lesson) => lesson.id === classId))
       lessonsState && setLessonsCompletionState(userDataState.id, classId)
-      //theCourse && setChaptersState(theCourse.id, 'courseId')
    }, [lessonsState, classId])
 
    useEffect(() => {
@@ -106,52 +105,14 @@ export default function LessonDisplay() {
       '/dashboard'
    )
 
-   function setThisLessonAsCompleted() {
-      if (!!classId) {
-         const lessonCompletion = new LessonsCompletionModel({
-            userId: userDataState.id,
-            courseId: theLesson?.courseId ?? '',
-            chapterId: theLesson?.chapterId ?? null,
-            lessonId: classId,
-         })
-         lessonCompletion.save()
-      }
-   }
-
-   // this function checks which is the next lesson even if it's in hte next chapter
-   // if it returns undefined means there is no next lesson to display
-   function nextId() {
-      if (!listOfLesson || listOfLesson?.length === 0) return undefined
-      //if (!chaptersState || chaptersState.length === 0) return undefined
-
-      const currentIndex = listOfLesson?.findIndex((lesson) => lesson.id === classId)
-      if (typeof currentIndex === 'undefined' || currentIndex === -1) return undefined
-
-      // nextIndex means there is another lesson in this same chapter
-      const nextIndex = currentIndex !== listOfLesson?.length - 1 ? currentIndex + 1 : undefined
-      if (nextIndex) return listOfLesson[nextIndex].id
-
-      if (!!chaptersState && chaptersState.length !== 0) {
-         // if this is the last chapter there is no next lesson whatsoever
-         const allChaptersIds = chaptersState.map((chapter) => chapter.id)
-         const lastChapter = allChaptersIds[allChaptersIds.length - 1]
-         if (lastChapter === theLesson?.chapterId) return undefined
-
-         // time to run through the chapters looking for the next lesson
-         const listOfChapters = chaptersState
-            .filter((chapter) => chapter.id !== theLesson?.chapterId) //excludes current chapter
-            .map((chapter) => chapter.id)
-         let lessonsFromThatChapId: LessonModel | undefined = undefined
-         for (let idx = 0; idx < listOfChapters.length; idx++) {
-            lessonsFromThatChapId = lessonsState?.find(
-               (lessons) => lessons.chapterId === listOfChapters[idx]
-            )
-            if (lessonsFromThatChapId) return lessonsFromThatChapId?.id
-         }
-      }
-
-      return undefined
-   }
+   const { setThisLessonAsCompleted, nextLessonId } = nextLesson({
+      chaptersState,
+      lessonsState,
+      listOfLesson,
+      classId,
+      theLesson,
+      userDataState,
+   })
 
    return (
       <>
@@ -179,7 +140,7 @@ export default function LessonDisplay() {
                               className='bg-zinc-700 text-sky-100 hover:bg-sky-300 hover:text-zinc-800 rounded-full px-5 py-2 cursor-pointer transition-all duration-300'
                               onClick={() => {
                                  setThisLessonAsCompleted()
-                                 !nextId() && push('/dashboard')
+                                 !nextLessonId() && push('/dashboard')
                               }}
                            >
                               <span className='hidden 620:inline'>Marcar como visto</span>
@@ -197,16 +158,16 @@ export default function LessonDisplay() {
 
                         <div
                            className={`bg-zinc-700 text-sky-100 hover:bg-sky-300 hover:text-zinc-800 rounded-full px-5 py-2 cursor-pointer transition-all duration-300 ${
-                              nextId() ? '' : 'hidden 620:inline'
+                              nextLessonId() ? '' : 'hidden 620:inline'
                            }`}
                            onClick={() => {
                               !isLessonDone && setThisLessonAsCompleted()
-                              nextId()
-                                 ? push(`/dashboard/class?cid=${nextId()}`)
+                              nextLessonId()
+                                 ? push(`/dashboard/class?cid=${nextLessonId()}`)
                                  : push(`/dashboard/conclusion?course=${theLesson.courseId}`)
                            }}
                         >
-                           {nextId() ? (
+                           {nextLessonId() ? (
                               <>
                                  <span className='hidden 620:inline'>Próxima aula</span>
                                  <BsArrowRight size={24} className='inline' />

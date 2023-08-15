@@ -1,4 +1,4 @@
-import { Query, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore'
+import { Query, Timestamp, Unsubscribe, deleteDoc, doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore'
 import { Chapter, CourseCreationType } from './interfaces'
 import { db } from '@/config/firebase'
 import { generateID } from '@/utils/modelHelper'
@@ -84,11 +84,11 @@ export default class ChapterModel implements Chapter {
          return { ...chapter, isActive: activation }
 
       const { creationDate, ...rest } = { ...chapter }
-      const timestamp = creationDate
+      const timestamp = creationDate instanceof Date ? creationDate : creationDate as unknown as Timestamp
       return {
          ...rest,
          isActive: activation,
-         creationDate: timestamp instanceof Date ? timestamp : new Date(),
+         creationDate: timestamp instanceof Date ? timestamp : timestamp.toDate(),
       }
    }
 }

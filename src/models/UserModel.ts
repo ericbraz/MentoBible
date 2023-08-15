@@ -1,5 +1,6 @@
 import {
    Query,
+   Timestamp,
    Unsubscribe,
    deleteDoc,
    doc,
@@ -111,12 +112,12 @@ export default class UserModel implements User {
 
    private createFullerUserModel(user: User) {
       const { firstName, lastName, signUpDate, userRoleIds, userName } = { ...user }
-      const timestamp = signUpDate
+      const timestamp = signUpDate instanceof Date ? signUpDate : signUpDate as unknown as Timestamp
       const obj = {
          ...user,
          userName: userName ?? userNameFormatter(firstName, lastName),
          userRoleIds: !!userRoleIds && userRoleIds.length > 0 ? userRoleIds : [USER_ROLE_ID],
-         signUpDate: timestamp instanceof Date ? timestamp : new Date(),
+         signUpDate: timestamp instanceof Date ? timestamp : timestamp.toDate(),
       }
 
       return obj
