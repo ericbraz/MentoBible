@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from 'react'
 import useCoursesState from '../useCoursesState'
 import { CardProperties, CardPropertiesType, SelectedCourse } from '@/models/interfaces'

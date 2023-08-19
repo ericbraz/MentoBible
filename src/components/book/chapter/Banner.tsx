@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from 'react'
 import { possibleBanners } from '@/app/(dashboard)/dashboard/imageArray'
 import Image from 'next/image'

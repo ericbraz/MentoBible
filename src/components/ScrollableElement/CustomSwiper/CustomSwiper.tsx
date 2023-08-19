@@ -30,7 +30,8 @@ export default function CustomSwiper({
       760: { slidesPerView: 4.5, spaceBetween: '0.02vw' },
    }
 
-   const { biggerThanCustomScreen } = useDifferentScreens(620)
+   const { isCustomScreenBigger } = useDifferentScreens(760)
+   const biggerThanCustomScreen = isCustomScreenBigger()
 
    return (
       <>

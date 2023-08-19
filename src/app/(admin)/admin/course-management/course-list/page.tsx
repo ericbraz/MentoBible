@@ -92,7 +92,9 @@ export default function AdminCourseListPage() {
                                                   <div>
                                                      Módulo: {chapter.name}{' '}
                                                      <span className='text-xs'>
-                                                        ({chapter.isActive})
+                                                        ({chapter.isActive} -{' '}
+                                                        {chapter.chapterSequence + 1} - {chapter.id}
+                                                        )
                                                      </span>
                                                   </div>
                                                   <div>
@@ -110,7 +112,9 @@ export default function AdminCourseListPage() {
                                                               >
                                                                  Aula: {lesson.name}{' '}
                                                                  <span className='text-xs'>
-                                                                    ({lesson.isActive})
+                                                                    ({lesson.isActive} -{' '}
+                                                                    {lesson.lessonSequence + 1} -{' '}
+                                                                    {lesson.id})
                                                                  </span>
                                                               </Link>
                                                            </div>
@@ -128,7 +132,8 @@ export default function AdminCourseListPage() {
                                                >
                                                   Aula: {lesson.name}{' '}
                                                   <span className='text-xs'>
-                                                     ({lesson.isActive})
+                                                     ({lesson.isActive} -{' '}
+                                                     {lesson.lessonSequence + 1} - {lesson.id})
                                                   </span>
                                                </Link>
                                             ))}
