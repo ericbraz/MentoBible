@@ -1,3 +1,4 @@
+'use client'
 import useActiveCourses from '@/hooks/specificHooks/useActiveCourses'
 import CustomSwiper from '../CustomSwiper'
 import { SelectedCourse } from '@/models/interfaces'

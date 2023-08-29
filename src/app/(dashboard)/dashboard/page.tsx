@@ -1,4 +1,3 @@
-'use client'
 import ScrollableElement from '@/components/ScrollableElement'
 import Banner from '@/components/book/chapter/Banner'
 

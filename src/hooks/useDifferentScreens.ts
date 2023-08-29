@@ -12,8 +12,11 @@ export default function useDifferentScreens(customValue?: number) {
 
    const smallerScreens = mobileScreen || tabletScreen
 
-   const customScreen = customValue ?? 0
-   const biggerThanCustomScreen = screenWidth > customScreen
+   function isCustomScreenBigger() {
+      const customScreen = customValue ?? 0
+      const biggerThanCustomScreen = screenWidth > customScreen
+      return biggerThanCustomScreen
+   }
 
-   return { smallerScreens, mobileScreen, tabletScreen, desktopScreen, biggerThanCustomScreen }
+   return { smallerScreens, mobileScreen, tabletScreen, desktopScreen, isCustomScreenBigger }
 }

@@ -163,8 +163,9 @@ function extractFileName(fullFileName: string): string {
    return parts.join('-')
 }
 
-export function equalArrays<T>(arr1: T[], arr2: T[]) {
-   if (arr1.length !== arr2.length) return false
+export function equalArrays<T>(arr1: T[] | undefined, arr2: T[] | undefined) {
+   if (!arr1 || !arr2) return false
+   if (arr1?.length !== arr2?.length) return false
 
    arr1.sort()
    arr2.sort()

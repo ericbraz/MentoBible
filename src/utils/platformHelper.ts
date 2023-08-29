@@ -37,7 +37,7 @@ export function nextLesson(initialObj: NextLessonObject) {
       courseId,
    } = initialObj
 
-   function setThisLessonAsCompleted() {
+   async function setThisLessonAsCompleted() {
       if (!!classId && !!userDataState) {
          const lessonCompletion = new LessonsCompletionModel({
             userId: userDataState.id,
@@ -45,7 +45,7 @@ export function nextLesson(initialObj: NextLessonObject) {
             chapterId: theLesson?.chapterId ?? null,
             lessonId: classId,
          })
-         lessonCompletion.save()
+         await lessonCompletion.save()
       }
    }
 
@@ -63,23 +63,28 @@ export function nextLesson(initialObj: NextLessonObject) {
       const nextIndex = currentIndex !== listOfLesson?.length - 1 ? currentIndex + 1 : undefined
       if (nextIndex) return listOfLesson[nextIndex].id
 
-      if (!!chaptersState && chaptersState.length !== 0) {
+      if (!!chaptersState && chaptersState.length !== 0 && !!lessonsState) {
          // if this is the last chapter there is no next lesson whatsoever
-         const allChaptersIds = chaptersState.map((chapter) => chapter.id)
+         const cId = lessonsState.find((lesson) => lesson.id === classId)?.courseId
+         const allValidChaptersIds = lessonsState
+            .filter((lesson) => lesson.courseId === cId)
+            .map((lesson) => lesson.chapterId) as string[]
+
+         const allChaptersIds = allValidChaptersIds.every((value) => value)
+            ? chaptersState
+                 .map((chapter) => chapter.id)
+                 .filter((chapter) => allValidChaptersIds.includes(chapter))
+            : chaptersState.map((chapter) => chapter.id)
          const lastChapter = allChaptersIds[allChaptersIds.length - 1]
+
          if (lastChapter === theLesson?.chapterId) return
 
-         // time to run through the chapters looking for the next lesson
-         const listOfChapters = chaptersState
-            .filter((chapter) => chapter.id !== theLesson?.chapterId) //excludes current chapter
-            .map((chapter) => chapter.id)
-         let lessonsFromThatChapId: LessonModel | undefined = undefined
-         for (let idx = 0; idx < listOfChapters.length; idx++) {
-            lessonsFromThatChapId = lessonsState?.find(
-               (lessons) => lessons.chapterId === listOfChapters[idx]
-            )
-            if (lessonsFromThatChapId) return lessonsFromThatChapId?.id
-         }
+         const nextChapterIndex =
+            allChaptersIds.findIndex((chap) => chap === theLesson?.chapterId) + 1
+         const nextLessonId = [...lessonsState]
+            .filter((lesson) => lesson.chapterId === allChaptersIds[nextChapterIndex])
+            .sort((a, b) => a.lessonSequence - b.lessonSequence)[0]?.id
+         return nextLessonId
       }
 
       return

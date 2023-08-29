@@ -1,15 +1,15 @@
 'use client'
 import useCoursesState from '@/hooks/useCoursesState'
-import useRouterRedirection from '@/hooks/useRouterRedirection'
 import useUserState from '@/hooks/useUserState'
 import CourseModel from '@/models/CourseModel'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import LightBulb from '../book/verse/LightBulb'
 import { equalArrays } from '@/utils/modelHelper'
 import Link from 'next/link'
 
 export default function ConclusionDisplay() {
+   const { push } = useRouter()
    const params = useSearchParams()
    const courseId = params.get('course') ?? undefined
 
@@ -25,42 +25,45 @@ export default function ConclusionDisplay() {
 
    const [theCourse, setTheCourse] = useState<CourseModel>()
    useEffect(() => {
+      setLessonsState()
+      setLessonsCompletionState(userDataState.id)
+   }, [theCourse])
+   useEffect(() => {
       setTheCourse(coursesState?.find((course) => course.id === courseId))
    }, [coursesState])
-   useEffect(() => {
-      setLessonsCompletionState(userDataState.id)
-      theCourse && setLessonsState(theCourse.id, 'courseId')
-   }, [theCourse])
 
    const [lessonsIds, setLessonsIds] = useState<string[]>()
    const [completionsIds, setCompletionsIds] = useState<string[]>()
    useEffect(() => {
-      !!lessonsState && setLessonsIds(lessonsState?.map((lesson) => lesson.id))
+      !!lessonsState &&
+         setLessonsIds(
+            lessonsState
+               ?.filter((lesson) => lesson.courseId === courseId)
+               .map((lesson) => lesson.id)
+         )
       !!lessonsCompletionState &&
          setCompletionsIds(
             lessonsCompletionState
                .filter((completion) => completion.courseId === courseId)
                .map((completion) => completion.lessonId)
          )
-   }, [lessonsState, lessonsCompletionState])
+   }, [lessonsCompletionState])
 
-   useRouterRedirection(
-      () => {
-         const courseExists = coursesState?.find((course) => course.id === courseId)
-         const courseReallyConcluded =
-            !!lessonsIds &&
-            !!completionsIds &&
-            !!lessonsIds &&
-            !equalArrays(lessonsIds, completionsIds)
-         return !courseExists || !courseId || courseReallyConcluded
-      },
-      coursesState,
-      '/dashboard'
-   )
+   const [isInitialRender, setIsInitialRender] = useState(true)
+   useEffect(() => {
+      const courseExists = coursesState?.find((course) => course.id === courseId)
+      const courseReallyConcluded = equalArrays(lessonsIds, completionsIds)
+      if (isInitialRender) {
+         setIsInitialRender(false)
+         return
+      }
+
+      if (!courseExists || !courseId || !courseReallyConcluded) push('/dashboard')
+   }, [lessonsIds])
 
    return (
       <>
-         {!!theCourse ? (
+         {!!theCourse && !!equalArrays(lessonsIds, completionsIds) ? (
             <div className='grid grid-cols-3 gap-4 max-w-[900px] px-4'>
                <div className='flex flex-col justify-center items-start gap-5 col-span-2 text-white text-2xl'>
                   <div>
